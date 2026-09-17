@@ -1,0 +1,2366 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Progressive-enhancement gate. The `js` class enables the hidden reveal
+         states; a watchdog removes it again if the module bundle never boots
+         (404, blocked script, bad deploy path), so a broken build degrades to
+         VISIBLE content instead of serving Google an invisible page. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        window.setTimeout(function () {
+          if (!window.__dpBooted) root.classList.remove("js");
+        }, 3000);
+      })();
+    </script>
+    <style>
+      /* Critical inline CSS — prevents the pre-stylesheet flash (giant logo
+         SVG renders 300x150 by default, unstyled text runs huge) in the window
+         before the main stylesheet applies. Values mirror tokens.css and
+         components.css as LITERALS, because custom properties do not exist until
+          tokens.css has loaded. npm run responsive:check parses this block and
+          compares every logo declaration against the stylesheet, so a forgotten
+          value fails the build instead of flickering on screen. */
+      html { background: #0b1b2b; }
+      body { margin: 0; background: #0b1b2b; }
+      .header { height: 8rem; display: flex; align-items: center; }
+      .header .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+      .logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #ffffff; }
+      .logo__picture { display: contents; }
+      .logo__mark { height: clamp(6rem, 5vw + 4.5rem, 7rem); width: auto; flex: none; border-radius: 6px; border: 1px solid #c99a2e; }
+      .logo__word { display: flex; flex-direction: column; line-height: 1.05; }
+      .logo__name { font-family: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: 0.06em; text-transform: uppercase; color: #ffffff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65); }
+      .logo__sub { font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", "Consolas", monospace; font-size: 0.8125rem; letter-spacing: 0.38em; text-transform: uppercase; color: #dab054; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
+      /* components.css's small-phone tier, mirrored: without this the wordmark
+         reflows at 320px the moment the stylesheet lands. */
+      @media (max-width: 22.4375em) {
+        .logo__word { flex: none; }
+        .logo__name { white-space: nowrap; }
+        .logo__sub { letter-spacing: 0.2em; white-space: nowrap; }
+      }
+      .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; background: #0b1b2b; }
+      .hero__media img, .hero__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .hero__media picture { display: contents; }
+      .js .hero-stagger > * { opacity: 0; }
+    </style>
+    <!-- viewport-fit=cover is what makes the safe-area insets non-zero; the
+         edge-anchored fixed surfaces in base/components/sections consume them
+         via --dp-safe-* tokens. Without this token, `env(...)` resolves to 0. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Generated metadata. The six bare markers in this document are replaced
+             at build time by vite/plugins/seo.ts from src/seo/site.ts. Hand-edited
+             tags are overwritten on every build, and the audit fails on drift. -->
+    <title>Driving School in Kaikhali, Kolkata | Atabul Driving Center</title>
+    <meta name="description" content="Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call." />
+    <meta name="theme-color" content="#0b1b2b" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./brand/favicon-32.png" />
+    <link rel="apple-touch-icon" href="./brand/apple-touch-icon.png" />
+    <!-- Critical-path preloads: brand fonts arrive before first paint (no
+         fallback-font flash) and the LCP hero poster starts immediately.
+         The AVIF is the LCP candidate the <picture> below resolves to.
+         imagesrcset/imagesizes MUST mirror the <source> exactly, or every phone
+         preloads the 1600w file (53 KB) instead of the 900w one (27.5 KB) and
+         the browser additionally warns that the preload went unused. `href`
+         stays as the fallback for engines without imagesrcset support. -->
+    <link rel="preload" as="font" type="font/woff2" href="./fonts/manrope-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="./fonts/inter-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="./fonts/plex-mono-400-latin.woff2" crossorigin />
+    <link rel="preload" as="image" type="image/avif" fetchpriority="high" href="./hero-fallback.avif" imagesrcset="./hero-fallback-900.avif 900w, ./hero-fallback.avif 1600w" imagesizes="100vw" />
+    <!-- Canonical, robots directive, og:* and twitter:* with absolute URLs -->
+    <link rel="canonical" href="http://localhost:5173/" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://localhost:5173/" />
+    <meta property="og:site_name" content="Atabul Driving Center" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="Driving School in Kaikhali, Kolkata | Atabul Driving Center" />
+    <meta property="og:description" content="Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call." />
+    <meta property="og:image" content="http://localhost:5173/assets/hero-poster-og.jpg" />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="900" />
+    <meta property="og:image:alt" content="Atabul Driving Center — four-wheeler driving instruction on the roads of Kaikhali, Kolkata." />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Driving School in Kaikhali, Kolkata | Atabul Driving Center" />
+    <meta name="twitter:description" content="Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call." />
+    <meta name="twitter:image" content="http://localhost:5173/assets/hero-poster-og.jpg" />
+    <meta name="twitter:image:alt" content="Atabul Driving Center — four-wheeler driving instruction on the roads of Kaikhali, Kolkata." />
+
+    <!-- schema.org @graph: DrivingSchool, Person, WebSite, WebPage, FAQPage,
+         Service x3 and one VideoObject per rule clip (src/seo/schema.ts) -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "DrivingSchool",
+      "@id": "http://localhost:5173/#business",
+      "name": "Atabul Driving Center",
+      "alternateName": "Atabul Driving Center",
+      "url": "http://localhost:5173/",
+      "description": "Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call.",
+      "telephone": "+916290345383",
+      "email": "atabulmolla890@gmail.com",
+      "priceRange": "₹500-₹2,000",
+      "currenciesAccepted": "INR",
+      "paymentAccepted": "Cash, UPI",
+      "image": "http://localhost:5173/assets/hero-poster-og.jpg",
+      "logo": "http://localhost:5173/brand/atabul-mark-512.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Dakshin Maath, Mondal Ganthi Gali, near Dakshinmark Muslim Kabristan, Arjunpur",
+        "addressLocality": "Kaikhali, Kolkata",
+        "addressRegion": "West Bengal",
+        "postalCode": "700052",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 22.6323921,
+        "longitude": 88.4315486
+      },
+      "hasMap": "https://www.google.com/maps/place/ATABUL+DRIVING+CENTER/@22.6323921,88.4315486,17z",
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "Kaikhali"
+        },
+        {
+          "@type": "Place",
+          "name": "Baguiati"
+        },
+        {
+          "@type": "Place",
+          "name": "Arjunpur"
+        },
+        {
+          "@type": "Place",
+          "name": "Chinar Park"
+        },
+        {
+          "@type": "Place",
+          "name": "Rajarhat"
+        },
+        {
+          "@type": "Place",
+          "name": "Kolkata"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/share/1Ee5BaSHuk/",
+        "https://www.instagram.com/atabuldrivinginstructor",
+        "https://www.youtube.com/@atabuldrivinginstructor"
+      ],
+      "founder": {
+        "@id": "http://localhost:5173/#instructor"
+      },
+      "employee": {
+        "@id": "http://localhost:5173/#instructor"
+      },
+      "makesOffer": [
+        {
+          "@id": "http://localhost:5173/#service-beginner-driving-lessons"
+        },
+        {
+          "@id": "http://localhost:5173/#service-driving-skill-polishing-confidence-lessons"
+        },
+        {
+          "@id": "http://localhost:5173/#service-professional-driver-service"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "http://localhost:5173/#instructor",
+      "name": "Atabul Molla",
+      "jobTitle": "Lead driving instructor",
+      "image": "http://localhost:5173/trainer-portrait.webp",
+      "description": "Atabul Molla — Lead driving instructor at Atabul Driving Center, Kaikhali, Kolkata. Years of practical, safety-first instruction on Kaikhali and Baguiati roads.",
+      "worksFor": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "telephone": "+916290345383",
+      "sameAs": [
+        "https://www.youtube.com/@atabuldrivinginstructor"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "http://localhost:5173/#website",
+      "url": "http://localhost:5173/",
+      "name": "Atabul Driving Center",
+      "description": "Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call.",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "http://localhost:5173/#/",
+      "url": "http://localhost:5173/",
+      "name": "Driving School in Kaikhali, Kolkata | Atabul Driving Center",
+      "description": "Atabul Driving Center teaches four-wheeler driving in Kaikhali, Kolkata — beginner lessons, refresher training and hired-driver service. Book on call.",
+      "inLanguage": "en-IN",
+      "isPartOf": {
+        "@id": "http://localhost:5173/#website"
+      },
+      "about": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "mainEntity": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "http://localhost:5173/assets/hero-poster-og.jpg",
+        "width": 1600,
+        "height": 900,
+        "caption": "Atabul Driving Center — four-wheeler driving instruction on the roads of Kaikhali, Kolkata."
+      },
+      "hasPart": [
+        {
+          "@id": "http://localhost:5173/#faq"
+        },
+        {
+          "@id": "http://localhost:5173/#service-beginner-driving-lessons"
+        },
+        {
+          "@id": "http://localhost:5173/#service-driving-skill-polishing-confidence-lessons"
+        },
+        {
+          "@id": "http://localhost:5173/#service-professional-driver-service"
+        },
+        {
+          "@id": "http://localhost:5173/#video-rule-01"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "http://localhost:5173/#faq",
+      "mainEntityOfPage": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "inLanguage": "en-IN",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Where is Atabul Driving Center located?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We are at Dakshin Maath, Mondal Ganthi Gali, near Dakshinmark Muslim Kabristan, Arjunpur, Kaikhali, Kolkata 700052, near GM Soroni, serving the Kaikhali-Baguiati area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you provide pickup for training sessions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, pickup points are available across the Kaikhali-Baguiati area. Confirm your nearest pickup point when you book by call or WhatsApp."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I learn in my own car?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Both beginner lessons and our driving skill polishing \u0026 confidence lessons can be taken in your own car. Our instructors take special care of your vehicle during every session."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What will my training cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Training follows four stages: basic vehicle introduction, practical road training, confidence and traffic handling, and a final skill assessment that prepares you for independent driving and licence approval."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the fees and course durations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Training is ₹600 per hour, in your own car or in an academy vehicle. Professional driver service starts at ₹500 for 5 hours. The full rate card is published in the fees section above."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the training timings?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Morning, afternoon and evening slots are scheduled individually around your pickup convenience. Call us to check availability for your start date."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you provide the driving licence?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our final skill assessment prepares you for licence approval with confidence. For specifics about the licence process, ask us when you call."
+          }
+        }
+      ],
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "url": "http://localhost:5173/#faq"
+    },
+    {
+      "@type": "Service",
+      "@id": "http://localhost:5173/#service-beginner-driving-lessons",
+      "serviceType": "Beginner four-wheeler driver training",
+      "name": "Beginner driving lessons",
+      "description": "Start from zero: vehicle introduction, basic controls, and supervised practice until you drive confidently on live roads.",
+      "provider": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "areaServed": [
+        "Kaikhali",
+        "Baguiati",
+        "Arjunpur",
+        "Chinar Park",
+        "Rajarhat",
+        "Kolkata"
+      ],
+      "url": "http://localhost:5173/#booking",
+      "offers": {
+        "@type": "Offer",
+        "price": "600",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "description": "per hour (academy vehicle) / per 2 hours (own car)",
+        "url": "http://localhost:5173/#booking"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "http://localhost:5173/#service-driving-skill-polishing-confidence-lessons",
+      "serviceType": "Refresher and confidence driving lessons",
+      "name": "Driving skill polishing \u0026 confidence lessons",
+      "description": "Already know how to drive but lack confidence on the road, or returning after a long gap? Practical lessons that sharpen road awareness and restore full control of the vehicle.",
+      "provider": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "areaServed": [
+        "Kaikhali",
+        "Baguiati",
+        "Arjunpur",
+        "Chinar Park",
+        "Rajarhat",
+        "Kolkata"
+      ],
+      "url": "http://localhost:5173/#booking",
+      "offers": {
+        "@type": "Offer",
+        "price": "600",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "description": "per hour (academy vehicle) / per 2 hours (own car)",
+        "url": "http://localhost:5173/#booking"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "http://localhost:5173/#service-professional-driver-service",
+      "serviceType": "Hire driver for personal and commercial travel",
+      "name": "Professional driver service",
+      "description": "Reliable, experienced drivers for your personal and commercial travel needs: punctual, professional, and road-ready.",
+      "provider": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "areaServed": [
+        "Kaikhali",
+        "Baguiati",
+        "Arjunpur",
+        "Chinar Park",
+        "Rajarhat",
+        "Kolkata"
+      ],
+      "url": "http://localhost:5173/#booking",
+      "offers": {
+        "@type": "Offer",
+        "price": "500",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "description": "per 5 hours (5-seater)",
+        "url": "http://localhost:5173/#booking"
+      }
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-01",
+      "name": "Seat belt first — Atabul Driving Center road rules",
+      "description": "Fasten the seat belt before the vehicle moves, every drive.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-01.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-01.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-01.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-02",
+      "name": "Check before you move — Atabul Driving Center road rules",
+      "description": "Walk-around and mirror checks before pulling away.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-02.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-02.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-02.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-03",
+      "name": "Signal before turning — Atabul Driving Center road rules",
+      "description": "Indicate early so other road users read your intention.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-03.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-03.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-03.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-04",
+      "name": "Red means stop — Atabul Driving Center road rules",
+      "description": "Stop fully at the line on a red signal and hold the clutch.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-04.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-04.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-04.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-05",
+      "name": "Don't rush — Atabul Driving Center road rules",
+      "description": "Steady progress beats a saved second in city traffic.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-05.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-05.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-05.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-06",
+      "name": "Safe following distance — Atabul Driving Center road rules",
+      "description": "Keep a gap that lets you stop without braking hard.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-06.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-06.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-06.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-07",
+      "name": "Phone down — Atabul Driving Center road rules",
+      "description": "No calls or messages while the vehicle is in motion.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-07.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-07.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-07.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-08",
+      "name": "Pedestrian first — Atabul Driving Center road rules",
+      "description": "Yield to pedestrians and two-wheelers at every unmarked crossing.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-08.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-08.mp4",
+      "duration": "PT6S",
+      "embedUrl": "http://localhost:5173/rules/rule-08.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-10",
+      "name": "Keep crossings clear — Atabul Driving Center road rules",
+      "description": "Do not enter a crossing you cannot clear.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-10.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-10.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-10.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-11",
+      "name": "Speed is not skill — Atabul Driving Center road rules",
+      "description": "Control and predictability are what make a good driver.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-11.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-11.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-11.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-12",
+      "name": "Rain slow down — Atabul Driving Center road rules",
+      "description": "Wet grip and visibility both drop: reduce speed early.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-12.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-12.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-12.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-13",
+      "name": "Smooth braking — Atabul Driving Center road rules",
+      "description": "Progressive pressure keeps the car stable and passengers comfortable.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-13.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-13.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-13.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-14",
+      "name": "Lane change — Atabul Driving Center road rules",
+      "description": "Mirror, signal, check the blind spot, then move.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-14.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-14.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-14.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "http://localhost:5173/#video-rule-15",
+      "name": "Drinking? Don't drive — Atabul Driving Center road rules",
+      "description": "No amount of practice offsets alcohol behind the wheel.",
+      "thumbnailUrl": "http://localhost:5173/rules/rule-15.jpg",
+      "contentUrl": "http://localhost:5173/rules/rule-15.mp4",
+      "duration": "PT5S",
+      "embedUrl": "http://localhost:5173/rules/rule-15.mp4",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "isPartOf": {
+        "@id": "http://localhost:5173/#/"
+      },
+      "contentRating": "General Audience"
+    }
+  ]
+}
+    </script>
+    <script type="module" crossorigin src="./assets/indexDVhv5Hga.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/indexBCpAi_lv.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header" data-header>
+      <div class="container header__inner">
+        <a class="logo" href="#home" aria-label="Atabul Driving Center home">
+          <!-- The mark IS the supplied artwork: Asset/Data/Symbolic_logo.png, full
+               colour, kept on its own ground. Ladder and byte budgets come from
+               scripts/optimize-logo.mjs (npm run brand:mark). Sized by HEIGHT because
+               the file is 380x288 and a square width+height pair stretches it; the
+               artwork carries its own lettering, so the 96px floor is what makes every
+               part of it readable. §4 and §4a record the measurements. -->
+          <picture class="logo__picture">
+            <source type="image/webp" srcset="./brand/atabul-mark.webp" />
+            <img class="logo__mark" src="./brand/atabul-mark.png" width="380" height="288" alt="" decoding="async" />
+          </picture>
+          <span class="logo__word">
+            <span class="logo__name">Atabul</span>
+            <span class="logo__sub">Driving Center</span>
+          </span>
+        </a>
+
+        <nav class="nav-desktop" aria-label="Primary">
+          <ul class="nav-desktop__list">
+            <li><a class="nav-desktop__link" href="#about">About</a></li>
+            <li><a class="nav-desktop__link" href="#programmes">Programmes</a></li>
+            <li><a class="nav-desktop__link" href="#method">Method</a></li>
+            <li><a class="nav-desktop__link" href="#instructor">Instructor</a></li>
+            <li><a class="nav-desktop__link" href="#fees">Fees</a></li>
+            <li><a class="nav-desktop__link" href="#reviews">Reviews</a></li>
+            <li><a class="nav-desktop__link" href="#faq">FAQ</a></li>
+            <li><a class="nav-desktop__link" href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 8px">
+          <a class="btn btn--accent header__cta" href="#booking" data-nav-cta>Book training</a>
+          <button
+            class="nav-mobile-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            data-menu-toggle
+          >
+            <span class="visually-hidden">Open menu</span>
+            <span class="nav-mobile-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" data-lenis-prevent id="mobile-menu" data-mobile-menu hidden>
+      <div class="mobile-menu__top">
+        <span class="logo__name" aria-hidden="true">Atabul</span>
+        <button class="nav-mobile-toggle" type="button" aria-expanded="true" data-menu-close>
+          <span class="visually-hidden">Close menu</span>
+          <span class="nav-mobile-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+      <nav aria-label="Mobile">
+        <ul>
+          <li><a class="mobile-menu__link" style="--i: 0" href="#about"><span class="mobile-menu__index">01</span>About</a></li>
+          <li><a class="mobile-menu__link" style="--i: 1" href="#programmes"><span class="mobile-menu__index">02</span>Programmes</a></li>
+          <li><a class="mobile-menu__link" style="--i: 2" href="#method"><span class="mobile-menu__index">03</span>Training method</a></li>
+          <li><a class="mobile-menu__link" style="--i: 3" href="#instructor"><span class="mobile-menu__index">04</span>Instructor</a></li>
+          <li><a class="mobile-menu__link" style="--i: 4" href="#fees"><span class="mobile-menu__index">05</span>Fees</a></li>
+          <li><a class="mobile-menu__link" style="--i: 5" href="#reviews"><span class="mobile-menu__index">06</span>Reviews</a></li>
+          <li><a class="mobile-menu__link" style="--i: 6" href="#faq"><span class="mobile-menu__index">07</span>FAQ</a></li>
+          <li><a class="mobile-menu__link" style="--i: 7" href="#contact"><span class="mobile-menu__index">08</span>Contact</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu__foot">
+        <a class="btn btn--accent" href="#booking" data-nav-cta>Book training</a>
+        <a class="link link--underline" style="color: #fff" href="tel:+916290345383">+91 62903 45383</a>
+      </div>
+    </div>
+
+    <main id="main" tabindex="-1">
+      <!-- ================= HERO ================= -->
+      <section class="hero" id="home" aria-label="Introduction">
+        <div class="hero__media" data-hero-media aria-hidden="true">
+          <!-- LCP ladder: the same frame in AVIF → WebP → baseline JPEG, with a
+               900w cut for phones. Keep public/hero-fallback.* in sync via
+               `npm run optimize:poster`; the build audit fails if a variant is
+               missing or over its LCP budget. -->
+          <picture class="hero__picture">
+            <source
+              type="image/avif"
+              srcset="./hero-fallback-900.avif 900w, ./hero-fallback.avif 1600w"
+              sizes="100vw"
+            />
+            <source
+              type="image/webp"
+              srcset="./hero-fallback-900.webp 900w, ./hero-fallback.webp 1600w"
+              sizes="100vw"
+            />
+            <img
+              src="./hero-fallback.jpg"
+              alt=""
+              width="1600"
+              height="900"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+          <video muted loop playsinline preload="none" data-hero-video></video>
+        </div>
+        <div class="hero__scrim" aria-hidden="true"></div>
+        <div class="hero__frame" aria-hidden="true"></div>
+
+        <div class="container hero__inner hero-stagger">
+          <h1 class="hero__title">
+            Learn to drive.<br />
+            <em>Drive with confidence.</em>
+          </h1>
+          <p class="hero__support">
+            Professional four-wheeler driving education in Kaikhali, Kolkata - patient instruction,
+            real-road practice, and a method that builds confidence from the first ignition.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--accent" href="#booking">
+              Book training
+              <svg class="btn__icon btn__icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn--ghost-inverse" href="#programmes">Explore programmes</a>
+          </div>
+          <p class="hero__meta">
+            <span>Kaikhali · Kolkata</span>
+          </p>
+        </div>
+
+        <a class="hero__scroll" href="#about" aria-label="Scroll to about section">Scroll</a>
+      </section>
+
+      <!-- ================= ABOUT ================= -->
+      <section class="section" id="about" aria-labelledby="about-heading">
+        <div class="container about__grid">
+          <div class="about__copy">
+            <p class="eyebrow reveal">About the academy</p>
+            <h2 class="h2 reveal" id="about-heading" style="--reveal-delay: 80ms">
+              A trusted driving institute for Kaikhali and Baguiati.
+            </h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Atabul Driving Center is a trusted, professional driving training institute located in
+              Kaikhali, Dakshin Maath, Baguiati, near GM Soroni. We provide high-quality driving
+              education and reliable driver services to individuals and families in our local
+              community.
+            </p>
+            <p class="body-muted reveal" style="--reveal-delay: 220ms">
+              With years of practical experience and a strong focus on safety, we help beginners
+              become confident drivers and assist experienced learners in sharpening their road
+              skills. Our goal is simple: every student feels comfortable, confident, and fully
+              prepared for real-life driving situations.
+            </p>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature-list__item reveal">
+              <span class="feature-list__head">
+                <svg class="feature-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M4.2 16.5l5-2.6M19.8 16.5l-5-2.6" stroke-linecap="round"/></svg>
+                Expert instructors
+              </span>
+              <span class="feature-list__detail">Calm, patient, safety-first instruction on every drive.</span>
+            </div>
+            <div class="feature-list__item reveal" style="--reveal-delay: 80ms">
+              <span class="feature-list__head">
+                <svg class="feature-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11Z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5"/></svg>
+                Pickup points
+              </span>
+              <span class="feature-list__detail">Convenient pickup across the Kaikhali-Baguiati area.</span>
+            </div>
+            <div class="feature-list__item reveal" style="--reveal-delay: 160ms">
+              <span class="feature-list__head">
+                <svg class="feature-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Always on time
+              </span>
+              <span class="feature-list__detail">Scheduled sessions that respect your time.</span>
+            </div>
+            <div class="feature-list__item reveal" style="--reveal-delay: 240ms">
+              <span class="feature-list__head">
+                <svg class="feature-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13M5 13h14a1 1 0 0 1 1 1v3h-2.5M5 13a1 1 0 0 0-1 1v3h2.5M6.5 17a1.5 1.5 0 1 0 3 0m5 0a1.5 1.5 0 1 0 3 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Comfortable cars
+              </span>
+              <span class="feature-list__detail">Well-maintained, clean, learner-friendly vehicles.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROGRAMMES ================= -->
+      <section class="section section--surface" id="programmes" aria-labelledby="programmes-heading">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Programmes</p>
+            <h2 class="h2 reveal" id="programmes-heading" style="--reveal-delay: 80ms">Choose the way you want to learn.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Structured, practical, and safe training, whether it is your first time behind the
+              wheel or you want a professional driver on your seat.
+            </p>
+          </div>
+
+          <article class="programme reveal">
+            <div class="programme__grid">
+              <span class="programme__index" aria-hidden="true">P·01</span>
+              <div>
+                <h3 class="programme__name">Beginner driving lessons</h3>
+                <p class="mono-label programme__focus">First-time drivers</p>
+              </div>
+              <div>
+                <p class="programme__desc">
+                  Start from zero: vehicle introduction, basic controls, and supervised practice
+                  until you drive confidently on live roads.
+                </p>
+                <ul class="programme__points" role="list">
+                  <li>Vehicle basics</li>
+                  <li>Clutch &amp; gear control</li>
+                  <li>Live-road practice</li>
+                </ul>
+              </div>
+              <div class="programme__aside">
+                <span class="badge badge--gold"><span class="badge__dot" aria-hidden="true"></span>Most requested</span>
+                <a class="link link--underline" href="#booking" data-programme-link="Beginner driving lessons">
+                  Book this programme
+                  <svg class="link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="programme reveal">
+            <div class="programme__grid">
+              <span class="programme__index" aria-hidden="true">P·02</span>
+              <div>
+                <h3 class="programme__name">Driving skill polishing &amp; confidence lessons</h3>
+                <p class="mono-label programme__focus">Refresher &amp; confidence</p>
+              </div>
+              <div>
+                <p class="programme__desc">
+                  Already know how to drive but lack confidence on the road, or returning after a
+                  long gap? Practical lessons that sharpen road awareness and restore full control
+                  of the vehicle.
+                </p>
+                <ul class="programme__points" role="list">
+                  <li>Road-awareness practice</li>
+                  <li>Own car or academy vehicle</li>
+                  <li>Long-gap refresher</li>
+                </ul>
+              </div>
+              <div class="programme__aside">
+                <a class="link link--underline" href="#booking" data-programme-link="Driving skill polishing &amp; confidence lessons">
+                  Book this programme
+                  <svg class="link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="programme reveal">
+            <div class="programme__grid">
+              <span class="programme__index" aria-hidden="true">P·03</span>
+              <div>
+                <h3 class="programme__name">Professional driver service</h3>
+                <p class="mono-label programme__focus">Hire a driver</p>
+              </div>
+              <div>
+                <p class="programme__desc">
+                  Reliable, experienced drivers for your personal and commercial travel needs: punctual, professional, and road-ready.
+                </p>
+                <ul class="programme__points" role="list">
+                  <li>Personal &amp; commercial</li>
+                  <li>Vetted drivers</li>
+                  <li>Flexible engagement</li>
+                </ul>
+              </div>
+              <div class="programme__aside">
+                <a class="link link--underline" href="#contact" data-service-link>
+                  Enquire on call
+                  <svg class="link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= TRAINING METHOD ================= -->
+      <section class="section section--navy on-navy" id="method" aria-labelledby="method-heading">
+        <div class="container">
+          <div class="section-head section-head--on-navy">
+            <p class="eyebrow eyebrow--light reveal">Training method</p>
+            <h2 class="h2 reveal" id="method-heading" style="--reveal-delay: 80ms">Four stages. One confident driver.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              A structured path from first ignition to independent driving, with every stage signed off
+              before you move ahead.
+            </p>
+          </div>
+
+          <div class="method__grid">
+            <div class="stage reveal">
+              <span class="stage__step">Stage 01</span>
+              <h3 class="stage__name">Basic vehicle introduction</h3>
+              <p class="stage__desc">
+                Learn the essential parts and functions of the vehicle: steering control, gears,
+                clutch, brake, accelerator, and basic safety checks, before you start.
+              </p>
+            </div>
+            <div class="stage reveal" style="--reveal-delay: 80ms">
+              <span class="stage__step">Stage 02</span>
+              <h3 class="stage__name">Practical road training</h3>
+              <p class="stage__desc">
+                Real driving experience on live roads under expert supervision: traffic rules,
+                lane discipline, turning, overtaking, and safe technique.
+              </p>
+            </div>
+            <div class="stage reveal" style="--reveal-delay: 160ms">
+              <span class="stage__step">Stage 03</span>
+              <h3 class="stage__name">Confidence &amp; traffic handling</h3>
+              <p class="stage__desc">
+                Build composure in busy traffic: smart decision-making, defensive driving, and
+                smooth control in real-road situations.
+              </p>
+            </div>
+            <div class="stage reveal" style="--reveal-delay: 240ms">
+              <span class="stage__step">Stage 04</span>
+              <h3 class="stage__name">Final skill assessment</h3>
+              <p class="stage__desc">
+                A practical performance evaluation to make sure you are fully confident, safe, and
+                ready for independent driving and licence approval.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= INSTRUCTOR ================= -->
+      <section class="section" id="instructor" aria-labelledby="instructor-heading">
+        <div class="container instructor__grid">
+          <figure class="instructor__figure media-reveal" data-media-reveal>
+            <img
+              src="./trainer-portrait.webp"
+              data-instructor-img
+              alt="Portrait of Atabul Molla, lead driving instructor at Atabul Driving Center, Kaikhali, Kolkata."
+              loading="lazy"
+              decoding="async"
+              width="1305"
+              height="1206"
+            />
+            <span class="instructor__frame" aria-hidden="true"></span>
+            <figcaption class="instructor__meta-row">
+              <span class="badge">Lead instructor</span>
+              <span class="badge">Atabul Driving Center</span>
+            </figcaption>
+          </figure>
+
+          <div class="instructor__copy">
+            <p class="eyebrow reveal">Your instructor</p>
+            <h2 class="h2 reveal" id="instructor-heading" style="--reveal-delay: 80ms">
+              Learn with someone who stays calm until you get it right.
+            </h2>
+            <blockquote class="instructor__quote reveal" style="--reveal-delay: 160ms">
+              “Confidence is not taught in a classroom; it is built patiently, one drive at a
+              time, until perfection is achieved.”
+            </blockquote>
+            <ul class="trait-list reveal" style="--reveal-delay: 240ms" role="list">
+              <li>Patient and understanding with first-timers</li>
+              <li>Instils confidence and encourages while you drive</li>
+              <li>Takes utmost care of your car: no scratches, no dents</li>
+              <li>Happy to answer every query with patience</li>
+            </ul>
+            <div class="instructor__name reveal" style="--reveal-delay: 300ms">
+              <h3>Atabul Molla</h3>
+              <!-- Instructor line comes from src/seo/site.ts and also feeds the
+                   Person node in the JSON-LD @graph. -->
+              <span class="mono-label"
+                >Experience: Years of practical, safety-first instruction on Kaikhali and Baguiati roads.</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= REVIEWS ================= -->
+      <section class="section section--surface" id="reviews" aria-labelledby="reviews-heading">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">What learners say</p>
+            <h2 class="h2 reveal" id="reviews-heading" style="--reveal-delay: 80ms">Trusted by learners across Kaikhali-Baguiati.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Verified reviews from our Google Business profile. More reviews are added as learners
+              complete their training.
+            </p>
+          </div>
+
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+            <symbol id="icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6L2.5 9.5l6.6-.8L12 2.5Z"/></symbol>
+          </svg>
+
+          <div class="reviews-marquee reveal" data-marquee role="region" aria-label="Learner reviews, auto-scrolling carousel" style="--reveal-delay: 240ms">
+            <p class="marquee__hint mono-label" aria-hidden="true">All reviews posted on Google</p>
+            <button class="marquee-pause" type="button" data-marquee-pause aria-pressed="false" aria-label="Pause review carousel">
+              <svg class="marquee-pause__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="icon-pause" d="M9 5v14M15 5v14" stroke-linecap="round"/><path class="icon-play" d="M8 5.5v13l10-6.5L8 5.5Z" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="marquee__track" data-marquee-track>
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Time management is sincere and excellent. Behaviour is very polite and understanding, happy to answer all queries with patience. I had previous training in a motor training class but hardly learnt anything. With Atabul, within 6 days I could drive through the main road and traffic! He instils confidence and doesn't let go till perfection is achieved. I had a new car and he took utmost care to ensure no scratches or dents affected the new condition of my car. Recommend his service highly.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AB</span>
+                  <div class="review__meta">
+                    <span class="review__author">Avishek Bose</span>
+                    <span class="review__source">Posted on Google · February 2026</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Highly recommended! I wholeheartedly recommend Atabul ❤️. He is punctual, patient, a great listener, and an excellent driving instructor. His positive attitude and encouragement truly boost your confidence. The best part of learning from him is experiencing how smoothly and beautifully you can drive your car - it's truly another-level driving experience! 🚗✨ With his guidance, you become a confident and skilled driver in the shortest possible time. He won't let you stop until you are truly comfortable and confident on the road. From the bottom of my heart, I highly recommend Atabul to anyone who wants to become a confident driver! 🙏❤️”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">RB</span>
+                  <div class="review__meta">
+                    <span class="review__author">Raju Bera</span>
+                    <span class="review__source">3 reviews · just now</span>
+                  </div>
+                  <span class="tcard__badge">New</span>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Atabul da is an excellent driving trainer! He teaches with so much passion and elegance. Thanks to his expert guidance, my confidence on the road has completely built up.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Animesh Saha</span>
+                    <span class="review__source">2 reviews · 3 photos · a month ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“First thing first: Atabul is a great guy to learn with. The amount of conviction he puts into the whole coaching journey to take a novice to expert is paramount. He treats the…”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">RD</span>
+                  <div class="review__meta">
+                    <span class="review__author">Rakesh Dalai</span>
+                    <span class="review__source">Local Guide · 17 reviews · 5 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Always punctual. Very good behaviour makes things easy to understand. Very friendly behaviour and cooperation while making me understand things.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AM</span>
+                  <div class="review__meta">
+                    <span class="review__author">Anurag Mishra</span>
+                    <span class="review__source">Local Guide · 7 reviews · 6 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“One of the best places to learn driving! I started my lessons with him, and by the 4th day, I was already confident enough to drive in city traffic. The way he plans each session is excellent, it takes you step by step from the basics to…”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AG</span>
+                  <div class="review__meta">
+                    <span class="review__author">Abhishek Ghosh</span>
+                    <span class="review__source">2 reviews · 2 photos · 4 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“He is very punctual about timing, also behaviour is calm and safe. Always tries to teach with patience. He promised to teach within 15 days, and he kept his promise. Now I'm able to drive confidently in heavy traffic.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Susmita Sen</span>
+                    <span class="review__source">4 reviews · 4 photos · 7 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“On time, well behaved, learned within 13/15 days. 100% recommended for newcomers.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">TH</span>
+                  <div class="review__meta">
+                    <span class="review__author">Toushique Hossain</span>
+                    <span class="review__source">2 reviews · 3 photos · 2 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I've been taking classes from Atabul Da for the last 7 days, and he's always on time and punctual about the timing. My car is just 10 days old, and I was scared that I might scratch it while driving, but it was amazing to learn from him…”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">MA</span>
+                  <div class="review__meta">
+                    <span class="review__author">Md Arafat</span>
+                    <span class="review__source">3 reviews · 2 photos · 6 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“He is punctual. Behaviour is good, having proper experience to teach. My driving skill has been improved a lot. My wife is also taking classes from him. He gives driving classes in my own car. Highly recommended.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SK</span>
+                  <div class="review__meta">
+                    <span class="review__author">Saikat Karmakar</span>
+                    <span class="review__source">10 reviews · 7 photos · 8 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I have been learning driving for the last 9 days, and my experience has been very good. The instructor is sincere and always on time. His behaviour is polite and patient, which makes learning comfortable. He explains driving rules and…”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">WU</span>
+                  <div class="review__meta">
+                    <span class="review__author">Walid Ubaidah</span>
+                    <span class="review__source">3 reviews · edited 5 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Atabul is a very good trainer who teaches driving with utmost care and attention. He is extremely punctual, well-mannered, and makes the learning process comfortable and confidence-building.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">MD</span>
+                  <div class="review__meta">
+                    <span class="review__author">Adv. Mamoni Dey</span>
+                    <span class="review__source">8 reviews · 7 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Atabul is an excellent driver who keeps his temperament always cool during driving. His communication skill with customers is simply wonderful. Also his road-sense is worth mentioning.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">GC</span>
+                  <div class="review__meta">
+                    <span class="review__author">Goutam Chatterjee</span>
+                    <span class="review__source">1 review · a year ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I got excellent car driving training. Their car driving training in Kaikhali is very supportive.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">DD</span>
+                  <div class="review__meta">
+                    <span class="review__author">Dipankar Dey</span>
+                    <span class="review__source">3 reviews · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Very good driving service centre, I am very happy. This driving training centre in Rajarhat stands out. The curriculum is well-structured and focuses heavily on safety.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">OI</span>
+                  <div class="review__meta">
+                    <span class="review__author">Ovimani Israil</span>
+                    <span class="review__source">2 reviews · edited 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Very good driving centre and good professional driver. 👍”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SM</span>
+                  <div class="review__meta">
+                    <span class="review__author">Samiul Molla</span>
+                    <span class="review__source">1 review · 1 photo · 4 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Flexible timings and patient instructors. The ideal place to learn car driving for Chinar Park residents. A very professional driving training centre in Rajarhat; they teach excellent city and highway driving skills.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Sushmita Sana</span>
+                    <span class="review__source">1 review · edited 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I found the best car driving training in Kaikhali. They focus on basics and build strong confidence.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Santu Santra</span>
+                    <span class="review__source">2 reviews · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“If you're looking for a driving school in Baguiati, this is it. They have friendly staff and expert trainers, and a very careful, senior driver.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SA</span>
+                  <div class="review__meta">
+                    <span class="review__author">Swarup Acharya</span>
+                    <span class="review__source">1 review · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“They have a professional and reliable driving school in Baguiati. I felt safe and well instructed throughout.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SF</span>
+                  <div class="review__meta">
+                    <span class="review__author">Sk Faiazuddin</span>
+                    <span class="review__source">2 reviews · 3 photos · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“The top-rated driving school in Baguiati. The process from sign-up to licence was seamless. Very friendly, very happy with Atabul driving service centre.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SB</span>
+                  <div class="review__meta">
+                    <span class="review__author">Sahara Banu</span>
+                    <span class="review__source">1 review · edited 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Very good driving service centre, I am very happy. I learned to drive confidently on Kaikhali's busy roads. Their car driving training in Kaikhali is practical and effective.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">MI</span>
+                  <div class="review__meta">
+                    <span class="review__author">Md Irfan</span>
+                    <span class="review__source">1 review · edited 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Very good driver, but most importantly a fantastic person. Loved his drive.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Anurag Samaddar</span>
+                    <span class="review__source">Local Guide · 31 reviews · 9 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I am very satisfied with Atabul driving service centre.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">KM</span>
+                  <div class="review__meta">
+                    <span class="review__author">Khodabux Mallik</span>
+                    <span class="review__source">1 review · 7 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Trending and heavy cool! Behaviour is too good.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AK</span>
+                  <div class="review__meta">
+                    <span class="review__author">Adil Khan</span>
+                    <span class="review__source">3 reviews · 4 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“I passed my test on the first try. Thanks to their driving school in Baguiati for the excellent guidance. Very friendly person.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">JH</span>
+                  <div class="review__meta">
+                    <span class="review__author">Jai Ho</span>
+                    <span class="review__source">1 review · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Atabul driving service centre: very experienced driver, and I learned to drive a car very quickly.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AO</span>
+                  <div class="review__meta">
+                    <span class="review__author">Asin Official</span>
+                    <span class="review__source">2 reviews · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“This driving training centre in Rajarhat stands out. The curriculum is well-structured and focuses heavily on safety.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">SS</span>
+                  <div class="review__meta">
+                    <span class="review__author">Sk Saruk</span>
+                    <span class="review__source">1 review · edited 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Highly recommend their car driving training in Kaikhali, professional and stress-free learning experience.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">FB</span>
+                  <div class="review__meta">
+                    <span class="review__author">Farida Bibi</span>
+                    <span class="review__source">1 review · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tcard">
+                <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                  <svg aria-hidden="true"><use href="#icon-star" /></svg>
+                </span>
+                <blockquote class="tcard__text">“Best decision to learn car driving in Chinar Park. For all Chinar Park locals, this centre is a great find.”</blockquote>
+                <div class="review__byline">
+                  <span class="review__avatar" aria-hidden="true">AM</span>
+                  <div class="review__meta">
+                    <span class="review__author">Arman Molla</span>
+                    <span class="review__source">1 review · 10 months ago</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="reviews__foot reveal">
+            <a class="btn btn--secondary" href="https://www.google.com/maps/place/ATABUL+DRIVING+CENTER/@22.6323921,88.4315486,17z" target="_blank" rel="noopener noreferrer">
+              Read reviews on Google
+              <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+<!-- ================= FEES ================= -->
+      <section class="section" id="fees" aria-labelledby="fees-heading">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Fees</p>
+            <h2 class="h2 reveal" id="fees-heading" style="--reveal-delay: 80ms">Clear pricing, shared directly.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Everything below is our published rate card: what you see is exactly what you pay.
+              Anything specific to your situation, we settle on the first call.
+            </p>
+          </div>
+
+          <!-- Tab Navigation -->
+          <div class="fees__tabs" role="tablist" aria-label="Fee categories">
+            <button class="fees__tab is-active" role="tab" aria-selected="true" aria-controls="panel-01" id="tab-01" data-tab="01">
+              <span class="fees__tab-number">01</span>
+              <span class="fees__tab-label">Beginner driving lessons</span>
+            </button>
+            <button class="fees__tab" role="tab" aria-selected="false" aria-controls="panel-02" id="tab-02" data-tab="02">
+              <span class="fees__tab-number">02</span>
+              <span class="fees__tab-label">Polish & confidence</span>
+            </button>
+            <button class="fees__tab" role="tab" aria-selected="false" aria-controls="panel-03" id="tab-03" data-tab="03">
+              <span class="fees__tab-number">03</span>
+              <span class="fees__tab-label">Driver service</span>
+            </button>
+            <button class="fees__tab" role="tab" aria-selected="false" aria-controls="panel-04" id="tab-04" data-tab="04">
+              <span class="fees__tab-number">04</span>
+              <span class="fees__tab-label">City & outstation tours</span>
+            </button>
+          </div>
+
+          <!-- Tab Panels -->
+          <div class="fees__panels">
+            <!-- Panel 01: Beginner driving lessons -->
+            <div class="fees__panel is-active" role="tabpanel" id="panel-01" aria-labelledby="tab-01">
+              <article class="fee-panel">
+                <header class="fee-panel__header">
+                  <h3 class="fee-panel__title">Beginner driving lessons</h3>
+                </header>
+                <div class="fee-panel__body">
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Training in your own car</h4>
+                      <p class="fee-item__desc">Personalised, practical instruction · pick-up and drop-off available for the learner</p>
+                    </div>
+                    <div class="fee-item__price">
+                      <span class="fee-item__amount">₹600</span>
+                      <span class="fee-item__unit">/ 2 hours</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Training in an academy vehicle</h4>
+                      <p class="fee-item__desc">Learner reaches the designated training location · no pick-up service</p>
+                    </div>
+                    <div class="fee-item__price">
+                      <span class="fee-item__amount">₹600</span>
+                      <span class="fee-item__unit">/ hour</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Panel 02: Polish & confidence -->
+            <div class="fees__panel" role="tabpanel" id="panel-02" aria-labelledby="tab-02" hidden>
+              <article class="fee-panel">
+                <header class="fee-panel__header">
+                  <h3 class="fee-panel__title">Polish & confidence</h3>
+                </header>
+                <div class="fee-panel__body">
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Training in your own car</h4>
+                      <p class="fee-item__desc">Personalised training in the vehicle you know · pick-up and drop-off available</p>
+                    </div>
+                    <div class="fee-item__price">
+                      <span class="fee-item__amount">₹600</span>
+                      <span class="fee-item__unit">/ 2 hours</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Training in an academy vehicle</h4>
+                      <p class="fee-item__desc">Learner reaches the designated training location · no pick-up service</p>
+                    </div>
+                    <div class="fee-item__price">
+                      <span class="fee-item__amount">₹600</span>
+                      <span class="fee-item__unit">/ hour</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Panel 03: Driver service -->
+            <div class="fees__panel" role="tabpanel" id="panel-03" aria-labelledby="tab-03" hidden>
+              <article class="fee-panel">
+                <header class="fee-panel__header">
+                  <h3 class="fee-panel__title">Driver service</h3>
+                </header>
+                <div class="fee-panel__body">
+                  <div class="fee-table-wrapper" role="region" aria-label="Driver service rates" tabindex="0">
+                    <table class="fee-table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vehicle</th>
+                          <th scope="col">5 hours</th>
+                          <th scope="col">Overtime</th>
+                          <th scope="col">10 hours / full day</th>
+                          <th scope="col">24 hours</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row"><span class="fee-table__vehicle">5-seater</span><span class="fee-table__examples">i10, i20 and similar</span></th>
+                          <td>₹500</td>
+                          <td>₹60 / hour</td>
+                          <td>₹1,000</td>
+                          <td>₹1,800</td>
+                        </tr>
+                        <tr>
+                          <th scope="row"><span class="fee-table__vehicle">7-8 seater</span><span class="fee-table__examples">Safari, XUV700 and similar</span></th>
+                          <td>₹550</td>
+                          <td>₹70 / hour</td>
+                          <td>₹1,100</td>
+                          <td>₹1,900</td>
+                        </tr>
+                        <tr>
+                          <th scope="row"><span class="fee-table__vehicle">Luxury cars</span><span class="fee-table__examples">BMW, Mercedes-Benz, Porsche and similar</span></th>
+                          <td>₹600</td>
+                          <td>₹80 / hour</td>
+                          <td>₹1,200</td>
+                          <td>₹2,000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="fee-panel__note">24-hour rates for the 5-seater and 7-8 seater categories apply to out-of-city service.</p>
+                  <p class="fee-panel__note">For 24-hour or extended driver services, meals for the driver (breakfast, lunch and dinner) are provided by the customer.</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- Panel 04: City & outstation tours -->
+            <div class="fees__panel" role="tabpanel" id="panel-04" aria-labelledby="tab-04" hidden>
+              <article class="fee-panel">
+                <header class="fee-panel__header">
+                  <h3 class="fee-panel__title">City & outstation tours</h3>
+                </header>
+                <div class="fee-panel__body">
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">City sightseeing & local tours</h4>
+                      <p class="fee-item__desc">Hourly / half-day / full-day — tailored to your itinerary</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Outstation & out-of-city tours</h4>
+                      <p class="fee-item__desc">Per km / per day basis — round trip or one-way</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Spot-to-spot transfers</h4>
+                      <p class="fee-item__desc">Airport, railway station, hotel, or point-to-point</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Short & long-distance tours</h4>
+                      <p class="fee-item__desc">Multi-day itineraries with driver & fuel included</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Full-day & customized car service</h4>
+                      <p class="fee-item__desc">10h / 12h / 24h — flexible scheduling</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                  <div class="fee-item">
+                    <div class="fee-item__info">
+                      <h4 class="fee-item__name">Personalized travel arrangements</h4>
+                      <p class="fee-item__desc">Custom routes, stops, timings — planned with you</p>
+                    </div>
+                    <div class="fee-item__price fee-item__price--enquire">
+                      <span class="fee-item__amount">Enquire for rates</span>
+                    </div>
+                  </div>
+                </div>
+                <footer class="fee-panel__footer">
+                  <p class="fee-panel__note">All car services include experienced driver, fuel, tolls & parking. Driver meals & interstate permits extra where applicable.</p>
+                  <p class="fee-panel__cta">
+                    Have a specific travel requirement?
+                    <a href="tel:+916290345383">Call us directly</a> to discuss your trip details — we&rsquo;ll arrange a suitable car service.
+                  </p>
+                </footer>
+              </article>
+            </div>
+          </div>
+
+          <div class="fees__cta reveal">
+            <a class="btn btn--primary" href="tel:+916290345383">
+              <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke-linejoin="round"/></svg>
+              Call us to book
+            </a>
+            <a class="btn btn--secondary" href="#booking">Request a callback</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FAQ ================= -->
+      <section class="section section--surface" id="faq" aria-labelledby="faq-heading">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Questions</p>
+            <h2 class="h2 reveal" id="faq-heading" style="--reveal-delay: 80ms">Before you take the wheel.</h2>
+          </div>
+          <div class="faq__layout reveal" data-accordion>
+            <div class="faq__col">
+              <!-- The accordion below is generated from the same array in
+                   src/seo/site.ts that feeds the FAQPage JSON-LD. Edit the data
+                   file; this marker must stay bare for the plugin to match it. -->
+                          <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-0" id="faq-t-0">
+                  Where is Atabul Driving Center located?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-0" role="region" aria-labelledby="faq-t-0">
+                <div class="accordion__panel-inner">
+                  <p>We are at Dakshin Maath, Mondal Ganthi Gali, near Dakshinmark Muslim Kabristan, Arjunpur, Kaikhali, Kolkata 700052, near GM Soroni, serving the Kaikhali-Baguiati area.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-1" id="faq-t-1">
+                  Do you provide pickup for training sessions?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-1" role="region" aria-labelledby="faq-t-1">
+                <div class="accordion__panel-inner">
+                  <p>Yes, pickup points are available across the Kaikhali-Baguiati area. Confirm your nearest pickup point when you book by call or WhatsApp.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-2" id="faq-t-2">
+                  Can I learn in my own car?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-2" role="region" aria-labelledby="faq-t-2">
+                <div class="accordion__panel-inner">
+                  <p>Yes. Both beginner lessons and our driving skill polishing &amp; confidence lessons can be taken in your own car. Our instructors take special care of your vehicle during every session.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-3" id="faq-t-3">
+                  What will my training cover?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-3" role="region" aria-labelledby="faq-t-3">
+                <div class="accordion__panel-inner">
+                  <p>Training follows four stages: basic vehicle introduction, practical road training, confidence and traffic handling, and a final skill assessment that prepares you for independent driving and licence approval.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-4" id="faq-t-4">
+                  What are the fees and course durations?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-4" role="region" aria-labelledby="faq-t-4">
+                <div class="accordion__panel-inner">
+                  <p>Training is ₹600 per hour, in your own car or in an academy vehicle. Professional driver service starts at ₹500 for 5 hours. The full rate card is published in the fees section above.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-5" id="faq-t-5">
+                  What are the training timings?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-5" role="region" aria-labelledby="faq-t-5">
+                <div class="accordion__panel-inner">
+                  <p>Morning, afternoon and evening slots are scheduled individually around your pickup convenience. Call us to check availability for your start date.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item">
+              <h3>
+                <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-p-6" id="faq-t-6">
+                  Do you provide the driving licence?
+                  <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+              </h3>
+              <div class="accordion__panel" id="faq-p-6" role="region" aria-labelledby="faq-t-6">
+                <div class="accordion__panel-inner">
+                  <p>Our final skill assessment prepares you for licence approval with confidence. For specifics about the licence process, ask us when you call.</p>
+                </div>
+              </div>
+            </div>
+            </div><!-- /faq__col -->
+
+            <!-- RULE & SAFETY - vertical video rail (top→bottom drift) -->
+            <aside class="rules-rail" data-rules-rail aria-label="Rule and safety instruction clips">
+              <div class="rules-rail__head">
+                <p class="rules-rail__title mono-label">Rule &amp; safety</p>
+                <button class="marquee-pause" type="button" data-marquee-pause aria-pressed="false" aria-label="Pause rule clips carousel">
+                  <svg class="marquee-pause__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="icon-pause" d="M9 5v14M15 5v14" stroke-linecap="round"/><path class="icon-play" d="M8 5.5v13l10-6.5L8 5.5Z" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="rules-rail__window" data-rules-window>
+                <ul class="rules-track" data-rules-track>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-01.jpg" data-src="./rules/rule-01.mp4" aria-label="Rule: Seat belt first"></video>
+                    <span class="rule-card__label">Seat belt first</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-02.jpg" data-src="./rules/rule-02.mp4" aria-label="Rule: Check before you move"></video>
+                    <span class="rule-card__label">Check before you move</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-03.jpg" data-src="./rules/rule-03.mp4" aria-label="Rule: Signal before turning"></video>
+                    <span class="rule-card__label">Signal before turning</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-04.jpg" data-src="./rules/rule-04.mp4" aria-label="Rule: Red means stop"></video>
+                    <span class="rule-card__label">Red means stop</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-05.jpg" data-src="./rules/rule-05.mp4" aria-label="Rule: Don't rush"></video>
+                    <span class="rule-card__label">Don't rush</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-06.jpg" data-src="./rules/rule-06.mp4" aria-label="Rule: Safe following distance"></video>
+                    <span class="rule-card__label">Safe following distance</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-07.jpg" data-src="./rules/rule-07.mp4" aria-label="Rule: Phone down"></video>
+                    <span class="rule-card__label">Phone down</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-08.jpg" data-src="./rules/rule-08.mp4" aria-label="Rule: Pedestrian first"></video>
+                    <span class="rule-card__label">Pedestrian first</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-10.jpg" data-src="./rules/rule-10.mp4" aria-label="Rule: Keep crossings clear"></video>
+                    <span class="rule-card__label">Keep crossings clear</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-11.jpg" data-src="./rules/rule-11.mp4" aria-label="Rule: Speed is not skill"></video>
+                    <span class="rule-card__label">Speed is not skill</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-12.jpg" data-src="./rules/rule-12.mp4" aria-label="Rule: Rain slow down"></video>
+                    <span class="rule-card__label">Rain slow down</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-13.jpg" data-src="./rules/rule-13.mp4" aria-label="Rule: Smooth braking"></video>
+                    <span class="rule-card__label">Smooth braking</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-14.jpg" data-src="./rules/rule-14.mp4" aria-label="Rule: Lane change"></video>
+                    <span class="rule-card__label">Lane change</span>
+                  </li>
+                  <li class="rule-card">
+                    <video class="rule-card__video" data-rule-video muted playsinline loop preload="none" poster="./rules/rule-15.jpg" data-src="./rules/rule-15.mp4" aria-label="Rule: Drinking don't drive"></video>
+                    <span class="rule-card__label">Drinking? Don't drive</span>
+                  </li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= BOOKING ================= -->
+      <section class="section" id="booking" aria-labelledby="booking-heading">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Book training</p>
+            <h2 class="h2 reveal" id="booking-heading" style="--reveal-delay: 80ms">Request your training slot.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Tell us what you need. We reply on call or WhatsApp to arrange the details , and  your
+              booking is confirmed only after we speak.
+            </p>
+          </div>
+
+          <div class="booking__panel reveal">
+            <form id="booking-form" novalidate aria-label="Training booking request">
+              <!-- Step indicator -->
+              <div class="booking__steps booking__counter" aria-hidden="true">
+                <span class="booking__step is-current" data-step-chip="0">Programme</span>
+                <span class="booking__step" data-step-chip="1">Experience</span>
+                <span class="booking__step" data-step-chip="2">Date</span>
+                <span class="booking__step" data-step-chip="3">Time</span>
+                <span class="booking__step" data-step-chip="4">Contact</span>
+              </div>
+              <div class="booking__progress" aria-hidden="true">
+                <div class="booking__progress-bar" data-progress-bar></div>
+              </div>
+
+              <!-- STEP 1 · Programme -->
+              <fieldset class="booking__fieldset booking__pane is-active" data-pane="0">
+                <legend class="booking__legend" tabindex="-1">Which programme do you need?</legend>
+                <div class="option-grid" role="radiogroup" aria-label="Programme">
+                  <label class="option">
+                    <input class="option__input" type="radio" name="programme" value="Beginner driving lessons" required />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">Beginner driving lessons</span>
+                      <span class="option__desc">First-time drivers, academy vehicle</span>
+                    </span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="programme" value="Driving skill polishing &amp; confidence lessons" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">Driving skill polishing &amp; confidence lessons</span>
+                      <span class="option__desc">Already drive? Rebuild road confidence</span>
+                    </span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="programme" value="Not sure yet" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">Not sure yet</span>
+                      <span class="option__desc">We will help you choose on call</span>
+                    </span>
+                  </label>
+                </div>
+                <p class="field__error" role="alert"><span data-error-for="programme"></span></p>
+              </fieldset>
+
+              <!-- STEP 2 · Experience -->
+              <fieldset class="booking__fieldset booking__pane" data-pane="1">
+                <legend class="booking__legend" tabindex="-1">What is your current experience?</legend>
+                <div class="option-grid" role="radiogroup" aria-label="Experience level">
+                  <label class="option">
+                    <input class="option__input" type="radio" name="experience" value="First-time learner" required />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">First-time learner</span>
+                      <span class="option__desc">Starting from zero</span>
+                    </span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="experience" value="Experienced (needs refresher)" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">Experienced (needs refresher)</span>
+                      <span class="option__desc">Sharpen skills and confidence</span>
+                    </span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="experience" value="Own-car training" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text">
+                      <span class="option__title">Own-car training</span>
+                      <span class="option__desc">Practice in the car I drive daily</span>
+                    </span>
+                  </label>
+                </div>
+                <p class="field__error" role="alert"><span data-error-for="experience"></span></p>
+              </fieldset>
+
+              <!-- STEP 3 · Date -->
+              <fieldset class="booking__fieldset booking__pane" data-pane="2">
+                <legend class="booking__legend" tabindex="-1">When would you like to start?</legend>
+                <div class="form-grid form-grid--2col">
+                  <div class="field" data-field>
+                    <label class="field__label" for="bk-date">Preferred start date</label>
+                    <input class="input" type="date" id="bk-date" name="date" data-min-today required />
+                    <span class="field__hint">Exact slots are arranged on call.</span>
+                    <span class="field__error" role="alert" data-error-for="date"></span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- STEP 4 · Time -->
+              <fieldset class="booking__fieldset booking__pane" data-pane="3">
+                <legend class="booking__legend" tabindex="-1">Which part of the day suits you?</legend>
+                <div class="option-grid" role="radiogroup" aria-label="Preferred time">
+                  <label class="option">
+                    <input class="option__input" type="radio" name="time" value="Morning" required />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text"><span class="option__title">Morning</span></span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="time" value="Afternoon" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text"><span class="option__title">Afternoon</span></span>
+                  </label>
+                  <label class="option">
+                    <input class="option__input" type="radio" name="time" value="Evening" />
+                    <span class="option__check" aria-hidden="true"></span>
+                    <span class="option__text"><span class="option__title">Evening</span></span>
+                  </label>
+                </div>
+                <p class="field__error" role="alert"><span data-error-for="time"></span></p>
+              </fieldset>
+
+              <!-- STEP 5 · Contact + consent -->
+              <fieldset class="booking__fieldset booking__pane" data-pane="4">
+                <legend class="booking__legend" tabindex="-1">How should we reach you?</legend>
+                <div class="form-grid form-grid--2col">
+                  <div class="field" data-field>
+                    <label class="field__label" for="bk-name">Full name</label>
+                    <input class="input" type="text" id="bk-name" name="name" autocomplete="name" placeholder="e.g. Rahul Das…" required />
+                    <span class="field__error" role="alert" data-error-for="name"></span>
+                  </div>
+                  <div class="field" data-field>
+                    <label class="field__label" for="bk-phone">Phone / WhatsApp</label>
+                    <input class="input" type="tel" id="bk-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+91 98XXXXXXXX…" required />
+                    <span class="field__hint">Used only to confirm your booking request.</span>
+                    <span class="field__error" role="alert" data-error-for="phone"></span>
+                  </div>
+                  <div class="field" data-field>
+                    <label class="field__label" for="bk-note">Note <span class="field__hint">(optional)</span></label>
+                    <input class="input" type="text" id="bk-note" name="note" placeholder="e.g. new car, weekday mornings…" />
+                  </div>
+                </div>
+                <div style="margin-top: 24px">
+                  <div class="field" data-field>
+                    <label class="consent">
+                      <input type="checkbox" name="consent" required />
+                      <span>I agree to be contacted on the number provided about my training request.</span>
+                    </label>
+                    <span class="field__error" role="alert" data-error-for="consent"></span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- Navigation -->
+              <div class="booking__nav">
+                <button class="btn btn--secondary" type="button" data-back disabled>
+                  <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 12H4m0 0 6 6m-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Back
+                </button>
+                <button class="btn btn--primary" type="button" data-next>
+                  Continue
+                  <svg class="btn__icon btn__icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="btn btn--accent" type="submit" data-submit hidden>
+                  Send booking request
+                  <svg class="btn__icon btn__icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </form>
+
+            <!-- No-JS guidance: reachable without JavaScript (success panel below is JS-only) -->
+            <noscript>
+              <p class="success__text" style="margin-bottom: 16px">
+                JavaScript is disabled, so the guided request form is unavailable. Please call
+                <a href="tel:+916290345383">+91 62903 45383</a> or
+                <a href="https://wa.me/916290345383?text=Hello%20Atabul%20Driving%20Center%2C%20I%20would%20like%20to%20know%20about%20four-wheeler%20driving%20lessons%20in%20Kaikhali."
+                   target="_blank" rel="noopener noreferrer">WhatsApp us</a> to book your
+                training directly.
+              </p>
+            </noscript>
+
+            <!-- Success state -->
+            <div class="booking__success" data-success hidden aria-live="polite">
+              <span class="badge badge--gold success__badge"><span class="badge__dot" aria-hidden="true"></span>Booking requested, awaiting confirmation</span>
+              <h3 class="success__title">Your request is ready to send.</h3>
+              <p class="success__text">
+                This is a <strong>booking request</strong>, not a confirmed appointment. Send it on
+                WhatsApp and our team will confirm your slot by call or message.
+              </p>
+              <dl class="success__summary" data-summary></dl>
+              <div class="success__actions">
+                <a class="btn btn--primary" data-wa-link href="#" target="_blank" rel="noopener noreferrer">
+                  <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.5 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.2-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.2-.2 3.9a11.6 11.6 0 0 0 4.5 4.3c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3Z"/></svg>
+                  Send on WhatsApp
+                </a>
+                <a class="btn btn--secondary" href="tel:+916290345383">Or call to confirm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= CONTACT / CTA ================= -->
+      <section class="section section--navy on-navy contact" id="contact" aria-labelledby="contact-heading">
+        <div class="container contact__grid">
+          <div>
+            <p class="eyebrow eyebrow--light reveal">Contact</p>
+            <h2 class="h2 reveal" id="contact-heading" style="--reveal-delay: 80ms">Reach out and connect.</h2>
+            <p class="lead reveal" style="--reveal-delay: 160ms">
+              Call, message, or visit us at Kaikhali. We are happy to answer every question before
+              you sit behind the wheel.
+            </p>
+            <div class="contact__social reveal" style="--reveal-delay: 240ms">
+              <a class="social-link" href="https://www.facebook.com/share/1Ee5BaSHuk/" target="_blank" rel="noopener noreferrer" aria-label="Atabul Driving Center on Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.3v3h2.4v7h2.8Z"/></svg>
+              </a>
+              <a class="social-link" href="https://www.instagram.com/atabuldrivinginstructor" target="_blank" rel="noopener noreferrer" aria-label="Atabul Driving Center on Instagram">
+                <!-- Built from primitives rather than a copied brand path: the
+                     Instagram mark IS a line glyph (rounded square + lens +
+                     flash dot), so it stays sharp at 18px and matches the
+                     stroke language used by every other icon here. -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4.8" />
+                  <circle cx="12" cy="12" r="4.1" />
+                  <circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none" />
+                </svg>
+              </a>
+              <a class="social-link" href="https://www.youtube.com/@atabuldrivinginstructor" target="_blank" rel="noopener noreferrer" aria-label="Atabul Driving Center on YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15.2V8.8l5.2 3.2L10 15.2Z"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="contact__rows">
+            <div class="contact__row reveal">
+              <span class="contact__row-label">Call / WhatsApp</span>
+              <a href="tel:+916290345383">+91 62903 45383</a>
+              <span class="contact__address">Driver service enquiries: <a href="tel:+919748449601">+91 97484 49601</a></span>
+            </div>
+            <div class="contact__row reveal" style="--reveal-delay: 80ms">
+              <span class="contact__row-label">Email</span>
+              <a href="mailto:atabulmolla890@gmail.com">atabulmolla890@gmail.com</a>
+            </div>
+            <div class="contact__row reveal" style="--reveal-delay: 160ms">
+              <span class="contact__row-label">Visit</span>
+              <p class="contact__address">
+                Dakshin Maath, Mondal Ganthi Gali, near Dakshinmark Muslim Kabristan, Arjunpur,
+                Kaikhali, Kolkata, West Bengal 700052
+              </p>
+              <a class="link link--underline" style="color: #fff" href="https://www.google.com/maps/place/ATABUL+DRIVING+CENTER/@22.6323921,88.4315486,17z" target="_blank" rel="noopener noreferrer">
+                Open in Google Maps
+                <svg class="link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="container cta-band">
+          <div class="cta-band__inner">
+            <h2 class="h3 reveal" style="font-weight: 300">Ready for your first drive?</h2>
+            <a class="btn btn--accent reveal" style="--reveal-delay: 80ms" href="#booking">Book training</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer on-navy">
+      <div class="container footer__main">
+        <div>
+          <a class="logo" href="#home" aria-label="Atabul Driving Center home">
+            <picture class="logo__picture">
+              <source type="image/webp" srcset="./brand/atabul-mark.webp" />
+              <img class="logo__mark" src="./brand/atabul-mark.png" width="380" height="288" alt="" decoding="async" />
+            </picture>
+            <span class="logo__word">
+              <span class="logo__name">Atabul</span>
+              <span class="logo__sub">Driving Center</span>
+            </span>
+          </a>
+          <p class="footer__blurb">
+            Professional four-wheeler driving education and reliable driver services in Kaikhali,
+            Kolkata.
+          </p>
+        </div>
+        <nav class="footer__col" aria-label="Footer">
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#programmes">Programmes</a></li>
+            <li><a href="#method">Training method</a></li>
+            <li><a href="#instructor">Instructor</a></li>
+            <li><a href="#fees">Fees</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col">
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="tel:+916290345383">+91 62903 45383</a></li>
+            <li><a href="mailto:atabulmolla890@gmail.com">atabulmolla890@gmail.com</a></li>
+            <li><a href="#booking">Book training</a></li>
+            <li><a href="#contact">Visit us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container footer__base">
+        <span>© 2026 Atabul Driving Center · Kaikhali, Kolkata</span>
+        <!-- Development credit, now in the slot the brand tagline held:
+             "Powered by" + the supplied CITYWINGS mark + the word, in that order.
+             It *replaces* "Precision in every pixel. Confidence in every drive."
+             rather than sitting next to it, so the footer never says
+             "Powered by CITYWINGS" twice.
+             alt="" because the adjacent word already names the company — a screen
+             reader says "Powered by CITYWINGS", not a file called source-symbol —
+             and if the image ever fails to decode the credit survives as text
+             instead of a broken-icon box. The mark keeps the white ground it was
+             supplied with (it has no alpha channel); the word is the white. -->
+        <p class="footer__credit">
+          <span class="footer__credit-label">Powered by</span>
+          <img class="footer__credit-mark" src="./brand/citywings-mark.webp" alt="" width="96" height="96" decoding="async" loading="lazy" />
+          <span class="footer__credit-word">CITYWINGS</span>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Fixed contact rail: pinned to one point on the screen at every viewport
+         width. No scroll listener, no reveal class, no position transition:
+         scrolling up and down cannot move it, and scripts/device-audit.mjs
+         measures that its rect is pixel-identical at y=0 and at the bottom
+         of the page. Call is the lower button because on a phone the bottom edge
+         is the thumb's home position. -->
+    <div class="contact-rail" role="group" aria-label="Call or message Atabul Driving Center">
+      <a class="rail-btn rail-btn--wa" href="https://wa.me/916290345383?text=Hello%20Atabul%20Driving%20Center%2C%20I%20would%20like%20to%20know%20about%20four-wheeler%20driving%20lessons%20in%20Kaikhali."
+         target="_blank" rel="noopener"
+         aria-label="Message Atabul Driving Center on WhatsApp at +91 62903 45383">
+        <!-- Chat bubble, not the trademarked WhatsApp glyph, in WhatsApp's
+             darker brand green: white on #25D366 is 2:1 and fails the 3:1
+             non-text contrast floor; #128c7e with white passes. -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><circle cx="8.8" cy="11.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="12.2" cy="11.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="15.6" cy="11.6" r="1.05" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="rail-btn rail-btn--call" href="tel:+916290345383"
+         aria-label="Call Atabul Driving Center on +91 62903 45383">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="toast-region" data-toast-region aria-live="polite" aria-atomic="false"></div>
+
+  </body>
+</html>

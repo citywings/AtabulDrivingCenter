@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>http://localhost:5173/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+      <image:image>
+        <image:loc>http://localhost:5173/assets/hero-poster-og.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-01.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-02.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-03.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-04.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-05.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-06.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-07.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-08.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-10.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-11.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-12.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-13.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-14.jpg</image:loc>
+      </image:image>
+      <image:image>
+        <image:loc>http://localhost:5173/rules/rule-15.jpg</image:loc>
+      </image:image>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-01.jpg</video:thumbnail_url>
+        <video:title>Seat belt first — Atabul Driving Center road rules</video:title>
+        <video:description>Fasten the seat belt before the vehicle moves, every drive.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-01.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-02.jpg</video:thumbnail_url>
+        <video:title>Check before you move — Atabul Driving Center road rules</video:title>
+        <video:description>Walk-around and mirror checks before pulling away.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-02.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-03.jpg</video:thumbnail_url>
+        <video:title>Signal before turning — Atabul Driving Center road rules</video:title>
+        <video:description>Indicate early so other road users read your intention.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-03.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-04.jpg</video:thumbnail_url>
+        <video:title>Red means stop — Atabul Driving Center road rules</video:title>
+        <video:description>Stop fully at the line on a red signal and hold the clutch.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-04.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-05.jpg</video:thumbnail_url>
+        <video:title>Don&#39;t rush — Atabul Driving Center road rules</video:title>
+        <video:description>Steady progress beats a saved second in city traffic.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-05.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-06.jpg</video:thumbnail_url>
+        <video:title>Safe following distance — Atabul Driving Center road rules</video:title>
+        <video:description>Keep a gap that lets you stop without braking hard.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-06.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-07.jpg</video:thumbnail_url>
+        <video:title>Phone down — Atabul Driving Center road rules</video:title>
+        <video:description>No calls or messages while the vehicle is in motion.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-07.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-08.jpg</video:thumbnail_url>
+        <video:title>Pedestrian first — Atabul Driving Center road rules</video:title>
+        <video:description>Yield to pedestrians and two-wheelers at every unmarked crossing.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-08.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-10.jpg</video:thumbnail_url>
+        <video:title>Keep crossings clear — Atabul Driving Center road rules</video:title>
+        <video:description>Do not enter a crossing you cannot clear.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-10.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-11.jpg</video:thumbnail_url>
+        <video:title>Speed is not skill — Atabul Driving Center road rules</video:title>
+        <video:description>Control and predictability are what make a good driver.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-11.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-12.jpg</video:thumbnail_url>
+        <video:title>Rain slow down — Atabul Driving Center road rules</video:title>
+        <video:description>Wet grip and visibility both drop: reduce speed early.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-12.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-13.jpg</video:thumbnail_url>
+        <video:title>Smooth braking — Atabul Driving Center road rules</video:title>
+        <video:description>Progressive pressure keeps the car stable and passengers comfortable.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-13.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-14.jpg</video:thumbnail_url>
+        <video:title>Lane change — Atabul Driving Center road rules</video:title>
+        <video:description>Mirror, signal, check the blind spot, then move.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-14.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+      <video:video>
+        <video:thumbnail_url>http://localhost:5173/rules/rule-15.jpg</video:thumbnail_url>
+        <video:title>Drinking? Don&#39;t drive — Atabul Driving Center road rules</video:title>
+        <video:description>No amount of practice offsets alcohol behind the wheel.</video:description>
+        <video:content_url>http://localhost:5173/rules/rule-15.mp4</video:content_url>
+        <video:family_friendly>yes</video:family_friendly>
+      </video:video>
+  </url>
+</urlset>

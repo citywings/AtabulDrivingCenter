@@ -2,8 +2,7 @@
 node_modules/
 .pnpm-store/
 
-# Build output
-dist/
+# Build output (dist/ is intentionally committed for deployment-ready artifacts)
 build/
 
 # Local environment files (never commit secrets)
