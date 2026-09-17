@@ -1,0 +1,1348 @@
+/* ==========================================================================
+   ATABUL DRIVING CENTER — SECTIONS
+   Editorial, cardless-first layouts. Cards only where grouping aids
+   comprehension. Whitespace is a primary design element.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   HERO — cinematic, media-led, restrained typography over the film
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  /* Cascade, not a fallback function: engines that do not know svh (iOS Safari
+     <15.4, Chrome <108) discard the second declaration and keep the first, so
+     the cinematic full-bleed height survives everywhere. */
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-start; /* stretch would fill the box and kill auto-margin centering */
+  isolation: isolate;
+  color: var(--dp-white);
+  overflow: hidden;
+  background: var(--dp-navy-900); /* fallback while media loads */
+}
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--dp-z-base) * -1 + 1);
+}
+/* <picture> is a layout-transparent wrapper: the absolutely positioned poster
+   inside it owns the box, so the LCP image is unaffected by the ladder. */
+.hero__picture {
+  display: contents;
+}
+.hero__media video,
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero__media img,
+.hero__media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Poster is the LCP layer; the film fades in ABOVE it once playable. */
+.hero__media video {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--dp-dur-media) var(--dp-ease-out-exact);
+}
+.hero__media.video-ready video { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero__media video { display: none; } /* poster carries the hero */
+}
+
+/* Restrained scrim — readable text without covering the film. Weighted toward
+   the center where the copy now sits, still strongest at the bottom edge. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--dp-scrim-hero-strong) 0%, rgba(11, 27, 43, 0.5) 50%, rgba(11, 27, 43, 0.32) 100%);
+  pointer-events: none;
+}
+.hero__frame {
+  /* thin gold precision frame — brand motif. One local token holds the base
+     offset so the phone override below cannot undo the device-chrome insets
+     (longhands placed after the `inset` shorthand win). */
+  --dp-hero-inset: var(--dp-space-16);
+  position: absolute;
+  inset: var(--dp-hero-inset);
+  inset-block-start: calc(var(--dp-hero-inset) + var(--dp-safe-t));
+  inset-block-end: calc(var(--dp-hero-inset) + var(--dp-safe-b));
+  inset-inline-start: calc(var(--dp-hero-inset) + var(--dp-safe-l));
+  inset-inline-end: calc(var(--dp-hero-inset) + var(--dp-safe-r));
+  border: 1px solid rgba(201, 154, 46, 0.35);
+  pointer-events: none;
+}
+@media (max-width: 47.9375em) { .hero__frame { --dp-hero-inset: var(--dp-space-8); } }
+
+.hero__inner {
+  position: relative;
+  width: 100%;
+  /* Far-left anchor: the copy hugs the page gutter (20-64px) instead of the
+     centered container, keeping 48px+ clearance inside the 16px gold frame.
+     Safe vertical centering: margin-block auto centers the block in the hero
+     and degrades to top-anchored (never clipped) if content outgrows it. */
+  margin-inline: 0;
+  margin-block: auto;
+  padding-block: calc(var(--dp-header-h) + var(--dp-space-32)) var(--dp-space-96);
+  display: grid;
+  gap: var(--dp-space-32);
+  max-width: 52rem;
+}
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-12);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-label);
+  text-transform: uppercase;
+  color: var(--dp-gold-400);
+}
+.hero__eyebrow::before { content: ""; width: 2.5rem; height: 1px; background: var(--dp-gold-500); }
+.hero__title {
+  font-family: var(--dp-font-display);
+  font-size: clamp(2.75rem, 7.5vw, 5.5rem);
+  font-weight: var(--dp-weight-light);
+  line-height: 1.04;
+  letter-spacing: var(--dp-tracking-tight);
+  text-wrap: balance;
+}
+.hero__title em {
+  font-style: normal;
+  color: var(--dp-gold-400);
+}
+.hero__support {
+  max-width: 46ch;
+  font-size: var(--dp-text-body-lg);
+  line-height: var(--dp-leading-body);
+  color: rgba(255, 255, 255, 0.86);
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--dp-space-16); }
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-12) var(--dp-space-24);
+  padding-top: var(--dp-space-24);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+/* Greeting — personalized, time-aware, HIGH CONTRAST YELLOW for prominent visibility */
+.hero__greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-8);
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-body-lg);
+  font-weight: var(--dp-weight-medium);
+  line-height: var(--dp-leading-tight);
+  color: #fff176; /* High contrast yellow — 14.8:1 on navy-900 */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+.hero__greeting::before {
+  content: "";
+  width: 1.5rem;
+  height: 2px;
+  background: #fff176;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__greeting { animation: none; }
+}
+
+/* Scroll cue — quiet, purposeful */
+.hero__scroll {
+  position: absolute;
+  right: var(--dp-gutter);
+  /* The contact rail is pinned bottom-right at every width now, and this cue
+     shares that corner on desktop — reserve the rail's height plus a gap. */
+  bottom: calc(var(--dp-space-96) + var(--dp-rail-h));
+  display: none;
+  align-items: center;
+  gap: var(--dp-space-12);
+  writing-mode: vertical-rl;
+  /* Vertical-rl swaps the axes, so min-width (not padding-inline) is what grows
+     the box sideways: 21px of rotated text was a finger trap on iPad. */
+  min-width: var(--dp-tap);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-label);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+}
+.hero__scroll::after {
+  content: "";
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, var(--dp-gold-500), transparent);
+  animation: dp-drip 2.2s var(--dp-ease-in-out) infinite;
+}
+@keyframes dp-drip {
+  0% { transform: scaleY(0); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: top; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+@media (min-width: 64em) {
+  .hero__scroll { display: inline-flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll::after { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   ABOUT — editorial split, cardless
+   -------------------------------------------------------------------------- */
+.about__grid {
+  display: grid;
+  gap: var(--dp-space-64);
+}
+@media (min-width: 64em) {
+  .about__grid {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--dp-space-96);
+  }
+}
+.about__copy { display: grid; gap: var(--dp-space-24); align-content: start; }
+
+/* Feature list — quiet, mono-indexed, cardless */
+.feature-list {
+  display: grid;
+  gap: var(--dp-space-24);
+  margin-top: var(--dp-space-48);
+}
+@media (min-width: 48em) {
+  .feature-list { grid-template-columns: 1fr 1fr; }
+}
+.feature-list__item {
+  display: grid;
+  gap: var(--dp-space-8);
+  padding-top: var(--dp-space-16);
+  border-top: 1px solid var(--dp-border);
+}
+.feature-list__head {
+  display: flex;
+  align-items: center;
+  gap: var(--dp-space-12);
+  font-weight: var(--dp-weight-medium);
+}
+.feature-list__icon { width: 1.25rem; height: 1.25rem; color: var(--dp-gold-600); flex: none; }
+.feature-list__detail { font-size: var(--dp-text-small); color: var(--dp-muted); }
+
+/* --------------------------------------------------------------------------
+   PROGRAMMES — editorial index list; gold only as active indicator
+   -------------------------------------------------------------------------- */
+.programme {
+  display: grid;
+  gap: var(--dp-space-24);
+  padding-block: var(--dp-space-48);
+  border-top: 1px solid var(--dp-border);
+  transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.programme:last-of-type { border-bottom: 1px solid var(--dp-border); }
+.programme:hover { border-top-color: var(--dp-navy-600); }
+.programme__grid { display: grid; gap: var(--dp-space-24); }
+@media (min-width: 64em) {
+  .programme__grid {
+    grid-template-columns: 6rem 1fr 2fr auto;
+    align-items: start;
+    gap: var(--dp-space-48);
+  }
+}
+.programme__index {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-small);
+  letter-spacing: var(--dp-tracking-mono);
+  color: var(--dp-gold-600);
+  padding-top: 0.4rem;
+}
+.programme__name {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h3);
+  font-weight: var(--dp-weight-light);
+  line-height: var(--dp-leading-tight);
+}
+.programme__focus { margin-top: var(--dp-space-8); }
+.programme__desc { color: var(--dp-muted); max-width: 52ch; }
+.programme__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-8) var(--dp-space-16);
+  margin-top: var(--dp-space-16);
+  padding: 0;
+  list-style: none;
+  font-size: var(--dp-text-micro);
+  font-family: var(--dp-font-mono);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: var(--dp-navy-600);
+}
+.programme__points li::before { content: "— "; color: var(--dp-gold-600); }
+.programme__aside {
+  display: grid;
+  gap: var(--dp-space-12);
+  justify-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   TRAINING METHOD — numbered stages on navy
+   -------------------------------------------------------------------------- */
+.method__grid {
+  display: grid;
+  gap: var(--dp-space-48);
+  counter-reset: stage;
+}
+@media (min-width: 48em) {
+  .method__grid { grid-template-columns: 1fr 1fr; gap: var(--dp-space-64) var(--dp-space-64); }
+}
+.stage {
+  display: grid;
+  gap: var(--dp-space-16);
+  padding-top: var(--dp-space-32);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  position: relative;
+}
+.stage::before {
+  /* thin gold precision marker */
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 3rem;
+  height: 1px;
+  background: var(--dp-gold-500);
+}
+.stage__step {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  color: var(--dp-gold-400);
+}
+.stage__name {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h4);
+  font-weight: var(--dp-weight-medium);
+}
+.stage__desc { color: var(--dp-muted-dark); font-size: var(--dp-text-small); }
+
+/* --------------------------------------------------------------------------
+   INSTRUCTOR — premium editorial split with portrait
+   -------------------------------------------------------------------------- */
+.instructor__grid {
+  display: grid;
+  gap: var(--dp-space-64);
+  align-items: center;
+}
+@media (min-width: 64em) {
+  .instructor__grid {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--dp-space-96);
+  }
+}
+.instructor__figure {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  justify-self: center;
+}
+.instructor__figure img {
+  width: 100%;
+  height: auto; /* height attr must not beat aspect-ratio */
+  /* Native near-square ratio of the trainer portrait — no crop, no blank fill */
+  aspect-ratio: 13 / 12;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--dp-radius-sm);
+  box-shadow: 0 32px 56px -32px rgba(11, 27, 43, 0.4);
+}
+.instructor__frame {
+  position: absolute;
+  inset: var(--dp-space-16) calc(var(--dp-space-16) * -1) calc(var(--dp-space-16) * -1) var(--dp-space-16);
+  border-right: 1px solid var(--dp-gold-500);
+  border-bottom: 1px solid var(--dp-gold-500);
+  pointer-events: none;
+}
+.instructor__meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-8) var(--dp-space-24);
+  margin-top: var(--dp-space-16);
+}
+.instructor__copy { display: grid; gap: var(--dp-space-24); align-content: start; }
+.instructor__quote {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h4);
+  font-weight: var(--dp-weight-light);
+  line-height: var(--dp-leading-tight);
+  color: var(--dp-navy-900);
+  padding-left: var(--dp-space-24);
+  border-left: 2px solid var(--dp-gold-500);
+  max-width: 46ch;
+}
+.trait-list {
+  display: grid;
+  gap: var(--dp-space-12);
+  padding: 0;
+  list-style: none;
+}
+.trait-list li {
+  display: flex;
+  gap: var(--dp-space-12);
+  align-items: baseline;
+  font-size: var(--dp-text-small);
+  color: var(--dp-ink);
+}
+.trait-list li::before {
+  content: "";
+  width: 0.5rem; height: 0.5rem;
+  flex: none;
+  border: 1.5px solid var(--dp-gold-500);
+  border-radius: 50%;
+  transform: translateY(1px);
+}
+.instructor__name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dp-space-16);
+  flex-wrap: wrap;
+}
+.instructor__name h3 {
+  font-size: var(--dp-text-h3);
+  font-weight: var(--dp-weight-light);
+}
+
+/* --------------------------------------------------------------------------
+   REVIEWS — quiet editorial, verified source marked
+   -------------------------------------------------------------------------- */
+.review {
+  display: grid;
+  gap: var(--dp-space-24);
+  max-width: 56rem;
+  padding-top: var(--dp-space-32);
+  border-top: 1px solid var(--dp-border);
+}
+.review__stars { display: inline-flex; gap: 3px; color: var(--dp-gold-500); }
+.review__stars svg { width: 1rem; height: 1rem; }
+.review__byline {
+  display: flex;
+  align-items: center;
+  gap: var(--dp-space-16);
+  flex-wrap: wrap;
+}
+.review__avatar {
+  width: 2.75rem; height: 2.75rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--dp-navy-900);
+  color: var(--dp-gold-400);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-small);
+}
+.review__meta { display: grid; gap: 2px; }
+.review__author { font-weight: var(--dp-weight-semibold); font-size: var(--dp-text-small); }
+.review__source { font-family: var(--dp-font-mono); font-size: var(--dp-text-micro); letter-spacing: var(--dp-tracking-mono); text-transform: uppercase; color: var(--dp-muted); }
+.reviews__foot {
+  margin-top: var(--dp-space-48);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--dp-space-16);
+}
+
+/* --------------------------------------------------------------------------
+   REVIEWS MARQUEE — slow drift right→left, pause on hover, edge fades.
+   CSS-only motion; JS mirrors the track once for the seamless -50% loop.
+   -------------------------------------------------------------------------- */
+.reviews-marquee {
+  position: relative;
+  margin-top: var(--dp-space-64);
+  overflow: hidden;
+  padding-block: var(--dp-space-8);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+.marquee__hint {
+  margin: 0 0 var(--dp-space-16);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: var(--dp-muted);
+  text-align: center;
+}
+.marquee__track {
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  will-change: transform;
+  animation: marquee-drift var(--marquee-duration, 120s) linear infinite;
+}
+/* Spacing rides on each card (not track gap): 2N cards + 2N trailing gaps makes
+   one copy exactly half the track, so the -50% loop wraps without a hop. */
+.marquee__track > * { margin-right: var(--dp-space-24); }
+@keyframes marquee-drift {
+  from { transform: translateX(-50%); }  /* enters from the left… */
+  to   { transform: translateX(0); }     /* …drifts right, loops seamlessly */
+}
+.tcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dp-space-16);
+  width: clamp(20rem, 28vw, 23rem);
+  padding: var(--dp-space-24);
+  background: var(--dp-white);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-sm);
+  box-shadow: 0 18px 36px -28px rgba(11, 27, 43, 0.35);
+}
+.tcard__text {
+  margin: 0;
+  font-family: var(--dp-font-display);
+  font-size: 0.95rem;
+  font-weight: var(--dp-weight-light);
+  line-height: 1.65;
+  color: var(--dp-navy-900);
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  line-clamp: 9;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tcard__badge {
+  align-self: flex-start;
+  font-family: var(--dp-font-mono);
+  /* Was 0.6875rem (11px) uppercase with 0.12em tracking — legible on a
+     monitor, a strain on a 6" phone held at arm's length. --dp-text-micro is
+     the declared floor for meaningful text. */
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dp-success);
+  background: var(--dp-success-bg);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+/* Pause on focus (keyboard) always; pause on hover only on devices that really
+   have a hover state. On touch, :hover "sticks" after a tap, so an ungated
+   hover rule can leave the carousel frozen with no visible way to resume — the
+   explicit control below is the touch affordance. */
+.reviews-marquee:focus-within .marquee__track { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .reviews-marquee:hover .marquee__track { animation-play-state: paused; }
+}
+
+/* Carousel pause control — WCAG 2.2.2: keyboard-reachable pause/Play for
+   auto-moving content (hover alone is not sufficient) */
+.marquee-pause {
+  display: inline-grid;
+  place-items: center;
+  /* 44px, not 36px: on a phone this is the only pause control a visitor can
+     actually reach, so it has to survive a thumb. */
+  width: var(--dp-tap);
+  height: var(--dp-tap);
+  border-radius: 999px;
+  border: 1px solid var(--dp-border-strong);
+  color: var(--dp-navy-900);
+  background: var(--dp-white);
+  transition: border-color var(--dp-dur-micro) linear, background-color var(--dp-dur-micro) linear;
+}
+.marquee-pause:hover { border-color: var(--dp-navy-900); }
+.marquee-pause[aria-pressed="true"] { background: var(--dp-navy-900); color: var(--dp-gold-400); }
+.marquee-pause__icon { width: 1.125rem; height: 1.125rem; }
+.marquee-pause .icon-play { display: none; }
+.marquee-pause[aria-pressed="true"] .icon-pause { display: none; }
+.marquee-pause[aria-pressed="true"] .icon-play { display: block; }
+.reviews-marquee .marquee-pause {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+.rules-rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dp-space-12);
+  margin: 0 0 var(--dp-space-12);
+}
+.rules-rail__head .rules-rail__title { margin: 0; text-align: left; }
+
+/* Accessibility: honor reduced motion — static, no drift, no mask needed */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; flex-wrap: wrap; width: auto; }
+  .reviews-marquee { mask-image: none; -webkit-mask-image: none; }
+}
+
+/* --------------------------------------------------------------------------
+   FEES — horizontal tab navigation with content panels
+   -------------------------------------------------------------------------- */
+
+/* Tab Navigation Bar */
+.fees__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-8);
+  margin-bottom: var(--dp-space-32);
+  padding-bottom: var(--dp-space-16);
+  border-bottom: 1px solid var(--dp-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.fees__tabs::-webkit-scrollbar { display: none; }
+
+.fees__tab {
+  flex: 1 1 auto;
+  min-width: 160px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dp-space-8);
+  padding: var(--dp-space-12) var(--dp-space-20);
+  background: var(--dp-surface);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-md);
+  color: var(--dp-muted);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+              border-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+              color var(--dp-dur-ui) var(--dp-ease-out-exact),
+              box-shadow var(--dp-dur-ui) var(--dp-ease-out-exact);
+  white-space: nowrap;
+}
+.fees__tab:hover {
+  background: var(--dp-white);
+  border-color: var(--dp-border-strong);
+  color: var(--dp-navy-900);
+}
+.fees__tab:focus-visible {
+  outline: 2px solid var(--dp-focus);
+  outline-offset: 2px;
+}
+.fees__tab.is-active {
+  background: var(--dp-navy-900);
+  border-color: var(--dp-navy-900);
+  color: var(--dp-white);
+  box-shadow: var(--dp-shadow-1);
+}
+.fees__tab-number {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  color: var(--dp-white);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-bold);
+  letter-spacing: var(--dp-tracking-mono);
+  border-radius: 50%;
+}
+.fees__tab.is-active .fees__tab-number {
+  background: var(--dp-gold-500);
+  color: var(--dp-navy-900);
+}
+.fees__tab-label {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-small);
+  font-weight: var(--dp-weight-medium);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Tab Panels Container */
+.fees__panels {
+  display: grid;
+  gap: var(--dp-space-24);
+}
+
+/* Tab Panel */
+.fees__panel {
+  display: none;
+}
+.fees__panel.is-active {
+  display: block;
+  animation: fee-panel-in var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+@keyframes fee-panel-in {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fees__panel.is-active { animation: none; }
+}
+
+/* Fee Panel — content card */
+.fee-panel {
+  background: var(--dp-white);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-md);
+  padding: var(--dp-space-32);
+  box-shadow: var(--dp-shadow-1);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+              box-shadow var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.fee-panel:hover {
+  border-color: var(--dp-border-strong);
+  box-shadow: var(--dp-shadow-2);
+}
+@media (min-width: 48em) {
+  .fee-panel { padding: var(--dp-space-40); }
+}
+
+/* Panel Header — section title inside panel */
+.fee-panel__header {
+  margin-bottom: var(--dp-space-20);
+  padding-bottom: var(--dp-space-16);
+  border-bottom: 1px solid var(--dp-border);
+}
+.fee-panel__title {
+  margin: 0;
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h4);
+  font-weight: var(--dp-weight-medium);
+  line-height: var(--dp-leading-tight);
+  color: var(--dp-navy-900);
+}
+
+.fee-panel__body {
+  display: grid;
+  gap: var(--dp-space-4);
+}
+
+/* Fee Item — reused for list-style panels */
+.fee-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--dp-space-16) var(--dp-space-24);
+  align-items: start;
+  padding: var(--dp-space-16) 0;
+  border-bottom: 1px solid var(--dp-border);
+  transition: background-color var(--dp-dur-micro) linear;
+}
+.fee-item:last-of-type { border-bottom: none; }
+.fee-item:hover { background: var(--dp-surface); border-radius: var(--dp-radius-sm); margin: 0 calc(var(--dp-space-16) * -1); padding-left: var(--dp-space-16); padding-right: var(--dp-space-16); }
+
+.fee-item__info { min-width: 0; }
+.fee-item__name {
+  margin: 0 0 var(--dp-space-4);
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-base);
+  font-weight: var(--dp-weight-medium);
+  line-height: var(--dp-leading-tight);
+  color: var(--dp-navy-900);
+}
+.fee-item__desc {
+  margin: 0;
+  font-size: var(--dp-text-small);
+  line-height: 1.5;
+  color: var(--dp-muted);
+  max-width: 42ch;
+}
+
+.fee-item__price {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+  white-space: nowrap;
+}
+.fee-item__amount {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-lg);
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: var(--dp-tracking-mono);
+  color: var(--dp-navy-900);
+  line-height: 1.2;
+}
+.fee-item__unit {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-regular);
+  letter-spacing: var(--dp-tracking-mono);
+  color: var(--dp-muted);
+}
+
+/* Enquire variant — professional "on request" styling */
+.fee-item__price--enquire .fee-item__amount {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-base);
+  font-weight: var(--dp-weight-medium);
+  letter-spacing: normal;
+  color: var(--dp-gold-600);
+  background: var(--dp-warning-bg);
+  padding: var(--dp-space-4) var(--dp-space-12);
+  border-radius: var(--dp-radius-sm);
+  border: 1px solid var(--dp-gold-500);
+  text-transform: none;
+}
+
+/* Fee Table Wrapper — for driver service panel */
+.fee-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 calc(var(--dp-space-24) * -1);
+  padding: 0 var(--dp-space-24);
+  border-radius: 0;
+}
+@media (min-width: 48em) {
+  .fee-table-wrapper { margin: 0 calc(var(--dp-space-32) * -1); padding: 0 var(--dp-space-32); }
+}
+
+/* Fee Table — styled to match panel aesthetic */
+.fee-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.fee-table thead {
+  background: var(--dp-navy-900);
+  color: var(--dp-white);
+}
+.fee-table th {
+  padding: var(--dp-space-16) var(--dp-space-20);
+  text-align: left;
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  font-weight: 500;
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fee-table th:first-child { border-radius: var(--dp-radius-sm) 0 0 0; }
+.fee-table th:last-child { border-radius: 0 var(--dp-radius-sm) 0 0; }
+
+.fee-table tbody tr { border-bottom: 1px solid var(--dp-border); transition: background-color var(--dp-dur-micro) linear; }
+.fee-table tbody tr:hover { background: var(--dp-surface); }
+.fee-table tbody tr:last-child { border-bottom: none; }
+
+.fee-table th[scope="row"],
+.fee-table td {
+  padding: var(--dp-space-16) var(--dp-space-20);
+  vertical-align: middle;
+}
+
+.fee-table__vehicle {
+  display: block;
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-base);
+  font-weight: var(--dp-weight-medium);
+  color: var(--dp-navy-900);
+}
+.fee-table__examples {
+  display: block;
+  font-family: var(--dp-font-body);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-regular);
+  color: var(--dp-muted);
+  margin-top: 2px;
+}
+
+.fee-table td {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-base);
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: var(--dp-tracking-mono);
+  color: var(--dp-navy-900);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Panel Footer — for notes and CTAs */
+.fee-panel__footer {
+  margin-top: var(--dp-space-24);
+  padding-top: var(--dp-space-20);
+  border-top: 1px solid var(--dp-border);
+  display: grid;
+  gap: var(--dp-space-12);
+}
+
+.fee-panel__note {
+  margin: 0;
+  font-size: var(--dp-text-small);
+  line-height: 1.5;
+  color: var(--dp-muted);
+  max-width: 56ch;
+}
+
+.fee-panel__cta {
+  margin: 0;
+  font-size: var(--dp-text-base);
+  line-height: 1.6;
+  color: var(--dp-muted);
+}
+.fee-panel__cta a {
+  font-weight: var(--dp-weight-semibold);
+  color: var(--dp-navy-900);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dp-dur-micro) linear;
+}
+.fee-panel__cta a:hover { color: var(--dp-gold-600); }
+
+/* CTA Row at bottom */
+.fees__cta {
+  margin-top: var(--dp-space-48);
+  padding-top: var(--dp-space-32);
+  border-top: 1px solid var(--dp-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-16);
+  justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 47.9375em) {
+  .fees__tab { min-width: 140px; padding: var(--dp-space-10) var(--dp-space-16); }
+  .fees__tab-label { font-size: var(--dp-text-micro); }
+  .fee-panel { padding: var(--dp-space-24); }
+}
+@media (max-width: 63.9375em) {
+  .fees__tabs { gap: var(--dp-space-6); }
+}
+
+/* --------------------------------------------------------------------------
+   FAQ
+   -------------------------------------------------------------------------- */
+.faq__layout {
+  display: grid;
+  gap: var(--dp-space-48);
+}
+.faq__col {
+  max-width: 48rem;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   RULE & SAFETY RAIL — vertical video carousel drifting top→bottom beside
+   the FAQ accordion. CSS-only motion; JS mirrors the track for the seamless
+   -50% loop, sizes the duration, and plays only in-view clips.
+   -------------------------------------------------------------------------- */
+.rules-rail {
+  position: relative;
+}
+.rules-rail__title {
+  margin: 0 0 var(--dp-space-12);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: var(--dp-muted);
+  text-align: center;
+}
+.rules-rail__window {
+  position: relative;
+  /* svh, not vh: the rail is `overflow: hidden`, and a large-viewport `vh`
+     measures against the URL bar retracted — so while the bar is showing, cards
+     were clipped top and bottom on iOS Safari. Cascade keeps old engines on vh. */
+  height: min(72vh, 620px);
+  height: min(72svh, 620px);
+  overflow: hidden;
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-sm);
+  background: var(--dp-navy-900);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+}
+.rules-track {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  will-change: transform;
+  animation: rules-drift var(--rules-duration, 60s) linear infinite;
+}
+/* Same trick as the reviews marquee: card-borne spacing = exact loop period */
+.rules-track > * { margin-bottom: var(--dp-space-20); }
+@keyframes rules-drift {
+  from { transform: translateY(-50%); } /* enters from the top… */
+  to   { transform: translateY(0); }    /* …drifts down, loops seamlessly */
+}
+.rule-card {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 32px -20px rgba(0, 0, 0, 0.5);
+}
+.rule-card__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+}
+.rule-card__label {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(11, 27, 43, 0.72);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+/* Pause while the visitor inspects a clip. :focus-within is universal; hover is
+   gated because a tap on a card would otherwise leave the rail stuck-paused on
+   touch (both rails also ship an explicit aria-pressed pause button). */
+.rules-rail:focus-within .rules-track { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .rules-rail:hover .rules-track { animation-play-state: paused; }
+}
+
+@media (min-width: 64em) {
+  .faq__layout {
+    grid-template-columns: minmax(0, 1fr) clamp(16rem, 24vw, 20rem);
+    gap: var(--dp-space-64);
+    align-items: start;
+  }
+  .rules-rail {
+    position: sticky;
+    top: calc(var(--dp-header-h) + 24px);
+  }
+}
+
+/* Accessibility: reduced motion — static list of posters, no drift, no autoplay */
+@media (prefers-reduced-motion: reduce) {
+  .rules-track { animation: none; }
+  .rules-rail__window { height: auto; mask-image: none; -webkit-mask-image: none; }
+}
+
+/* --------------------------------------------------------------------------
+   BOOKING — clarity over decoration; navy editorial panel
+   -------------------------------------------------------------------------- */
+.booking__panel {
+  background: var(--dp-white);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-md);
+  padding: clamp(var(--dp-space-24), 4vw, var(--dp-space-48));
+}
+.booking__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-8) var(--dp-space-16);
+  margin-bottom: var(--dp-space-40);
+}
+.booking__step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-8);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: var(--dp-muted);
+}
+.booking__step::before {
+  counter-increment: bkstep;
+  content: counter(bkstep);
+  display: grid;
+  place-items: center;
+  width: 1.5rem; height: 1.5rem;
+  border: 1px solid var(--dp-border-strong);
+  border-radius: 50%;
+  /* 11px numerals inside a 24px disc were unreadable on a phone; the disc has
+     the room, so use the declared micro floor. */
+  font-size: var(--dp-text-micro);
+}
+.booking__step.is-current { color: var(--dp-navy-900); }
+.booking__step.is-current::before { border-color: var(--dp-gold-500); background: var(--dp-gold-500); color: var(--dp-navy-900); }
+.booking__step.is-done::before { border-color: var(--dp-navy-900); background: var(--dp-navy-900); color: var(--dp-white); }
+.booking__step::after { content: "·"; margin-left: var(--dp-space-8); color: var(--dp-border-strong); }
+.booking__step:last-child::after { content: none; }
+.booking__counter { counter-reset: bkstep; }
+
+.booking__fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.booking__legend {
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h3);
+  font-weight: var(--dp-weight-light);
+  margin-bottom: var(--dp-space-24);
+}
+.booking__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--dp-space-16);
+  margin-top: var(--dp-space-40);
+  padding-top: var(--dp-space-32);
+  border-top: 1px solid var(--dp-border);
+}
+.booking__progress {
+  height: 2px;
+  background: var(--dp-border);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-bottom: var(--dp-space-40);
+}
+.booking__progress-bar {
+  height: 100%;
+  width: 0;
+  background: var(--dp-gold-500);
+  transition: width var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.booking__pane { display: none; }
+.booking__pane.is-active { display: block; animation: dp-pane var(--dp-dur-ui) var(--dp-ease-out-exact); }
+@keyframes dp-pane {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .booking__pane.is-active { animation: none; } }
+
+.form-grid { display: grid; gap: var(--dp-space-24); }
+@media (min-width: 48em) {
+  .form-grid--2col { grid-template-columns: 1fr 1fr; gap: var(--dp-space-24) var(--dp-space-32); }
+}
+
+/* Without JS: show the full request form as one readable sheet and hide
+   the step machinery. A noscript note directs to call/WhatsApp. */
+html:not(.js) .booking__pane { display: block; }
+html:not(.js) .booking__steps,
+html:not(.js) .booking__progress,
+html:not(.js) .booking__nav { display: none; }
+
+/* Success state — distinct REQUESTED vs CONFIRMED semantics */
+.booking__success { display: none; text-align: left; }
+.booking__success.is-active { display: block; animation: dp-pane var(--dp-dur-ui) var(--dp-ease-out-exact); }
+.success__badge { margin-bottom: var(--dp-space-24); }
+.success__title { font-size: var(--dp-text-h3); font-weight: var(--dp-weight-light); margin-bottom: var(--dp-space-16); }
+.success__text { color: var(--dp-muted); max-width: 56ch; }
+.success__summary {
+  margin: var(--dp-space-32) 0;
+  padding: var(--dp-space-24);
+  border: 1px solid var(--dp-border);
+  border-left: 2px solid var(--dp-gold-500);
+  border-radius: var(--dp-radius-sm);
+  display: grid;
+  gap: var(--dp-space-8);
+  font-size: var(--dp-text-small);
+}
+.success__summary dt { font-family: var(--dp-font-mono); font-size: var(--dp-text-micro); letter-spacing: var(--dp-tracking-mono); text-transform: uppercase; color: var(--dp-muted); }
+.success__summary dd { margin: 0; font-weight: var(--dp-weight-medium); }
+.success__actions { display: flex; flex-wrap: wrap; gap: var(--dp-space-16); }
+
+/* --------------------------------------------------------------------------
+   CONTACT — editorial details + map link
+   -------------------------------------------------------------------------- */
+.contact__grid { display: grid; gap: var(--dp-space-64); }
+@media (min-width: 64em) {
+  .contact__grid { grid-template-columns: 1fr 1fr; gap: var(--dp-space-96); }
+}
+.contact__rows { display: grid; gap: var(--dp-space-32); align-content: start; }
+.contact__row { display: grid; gap: var(--dp-space-8); }
+.contact__row-label {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-label);
+  text-transform: uppercase;
+  color: var(--dp-gold-400);
+}
+/* Phone / WhatsApp / email: the three things a visitor on a bus is going to
+   hit. Measured at 28px before, which is why they now get a real 44px box. */
+.contact__row a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--dp-tap);
+  color: var(--dp-white);
+  text-decoration: none;
+  font-size: var(--dp-text-body-lg);
+}
+.contact__row a:hover { color: var(--dp-gold-400); }
+.contact__address { color: var(--dp-muted-dark); max-width: 44ch; font-size: var(--dp-text-body); }
+.contact__social { display: flex; gap: var(--dp-space-16); margin-top: var(--dp-space-16); }
+.social-link {
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--dp-radius-sm);
+  color: var(--dp-white);
+  transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact), color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.social-link:hover { border-color: var(--dp-gold-500); color: var(--dp-gold-400); }
+.social-link svg { width: 1.125rem; height: 1.125rem; }
+
+/* --------------------------------------------------------------------------
+   CTA BAND — gold applied with restraint
+   -------------------------------------------------------------------------- */
+.cta-band {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.cta-band__inner {
+  display: grid;
+  gap: var(--dp-space-32);
+  padding-block: var(--dp-space-64);
+}
+@media (min-width: 64em) {
+  .cta-band__inner {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER
+   -------------------------------------------------------------------------- */
+.footer { background: var(--dp-navy-900); color: var(--dp-white); }
+.footer__main {
+  display: grid;
+  gap: var(--dp-space-48);
+  padding-block: var(--dp-space-64);
+}
+@media (min-width: 64em) {
+  .footer__main { grid-template-columns: 2fr 1fr 1fr; gap: var(--dp-space-64); }
+}
+.footer__blurb { color: var(--dp-muted-dark); max-width: 36ch; font-size: var(--dp-text-small); margin-top: var(--dp-space-16); }
+.footer__col h2 {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-medium);
+  letter-spacing: var(--dp-tracking-label);
+  text-transform: uppercase;
+  color: var(--dp-gold-400);
+  margin-bottom: var(--dp-space-16);
+}
+.footer__col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--dp-space-8); }
+.footer__col a {
+  color: var(--dp-muted-dark);
+  text-decoration: none;
+  font-size: var(--dp-text-small);
+  transition: color var(--dp-dur-micro) linear;
+}
+.footer__col a:hover { color: var(--dp-white); }
+/* Six 17px text links stacked at 8px gaps fail both the 44px promise in §15c and
+   WCAG 2.5.8's spacing exception, because the 24px target circles around adjacent
+   links overlap. Phones and tablets get real boxes; the desktop column stays
+   dense because a pointer does not need 44px here. */
+@media (max-width: 63.9375em) {
+  .footer__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--dp-tap);
+    min-width: var(--dp-tap); /* "Fees" was 31px wide — height alone is not a target */
+  }
+}
+.footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dp-space-8) var(--dp-space-24);
+  justify-content: space-between;
+  padding-block: var(--dp-space-24);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  /* Was rgba(255,255,255,0.45): composited over --dp-navy-900 that is #79828a,
+     i.e. 4.43:1 — under the 4.5:1 AA floor for a 13px line. 0.62 lifts it to
+     7.3:1 and the row still reads as secondary. scripts/verify-responsive.mjs
+     now computes this pair from the tokens so it cannot slide back. */
+  color: rgba(255, 255, 255, 0.62);
+}
+/* The tagline's old styling: removed with the tagline itself, so no dead rule
+   survives for something nothing renders.
+
+   Development credit — "Powered by [mark] CITYWINGS", mark before the word. It
+   sits opposite the copyright in the base row (that is the slot the tagline
+   used to hold), which puts it near the bottom-right corner where the fixed
+   contact rail lives; scripts/device-audit.mjs measures the two for real at
+   every width rather than trusting this comment. */
+.footer__credit {
+  display: flex;
+  align-items: center;
+  gap: var(--dp-space-8);
+  margin: 0;
+  /* Measured, not assumed: at 1024 and 1194 the base row puts this item flush
+     right, and the fixed rail's 56px column overlapped the word by 24px — the
+     WhatsApp button sat on top of "CITYWINGS". Reserving one rail button plus a
+     gutter clears it. A margin-inline-*END cannot move a start-aligned item, so
+     phones — where this wraps onto its own line — are untouched. */
+  margin-inline-end: calc(var(--dp-fab-size) + var(--dp-space-16));
+}
+.footer__credit-mark {
+  width: 1.5rem; height: 1.5rem;
+  display: block;
+  border-radius: var(--dp-radius-sm);
+  background: var(--dp-white); /* the mark's own supplied ground, painted while it decodes */
+}
+.footer__credit-word {
+  color: var(--dp-white); /* 17.4:1 against --dp-navy-900 */
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+/* --------------------------------------------------------------------------
+   Fixed contact rail — call + WhatsApp, pinned to one point on the viewport.
+
+   Contract, enforced by scripts/device-audit.mjs and the two static gates:
+   • `position: fixed`, and nothing else decides where it is. No scroll handler
+     toggles a class, no `.reveal` on it, no transition on `right`/`bottom`, so
+     its bounding box is identical at y=0 and at the bottom of the page.
+   • Visible at every width, desktop included. The old float-call hid itself
+     ≥64em "so the header CTA is not duplicated"; the header CTA books a slot,
+     this is the conversion path for a visitor already holding a phone, so the
+     rail now stays.
+   • Safe-area insets on the right and bottom, because it sits exactly where an
+     iPhone's home indicator and a notch'd Android's rounded corner are.
+   • 56px circular targets, above the 44px floor, spaced so a thumb cannot hit
+     the wrong one of the two.
+   -------------------------------------------------------------------------- */
+.contact-rail {
+  position: fixed;
+  right: calc(var(--dp-space-16) + var(--dp-safe-r));
+  bottom: calc(var(--dp-space-16) + var(--dp-safe-b));
+  z-index: var(--dp-z-header); /* under the overlay menu and the toast, above page content */
+  display: grid;
+  gap: var(--dp-space-12);
+}
+.rail-btn {
+  display: grid;
+  place-items: center;
+  width: var(--dp-fab-size);
+  height: var(--dp-fab-size);
+  border-radius: 50%;
+  box-shadow: var(--dp-shadow-2);
+  text-decoration: none;
+  transition: background-color var(--dp-dur-ui) var(--dp-ease-out-exact), transform var(--dp-dur-micro) var(--dp-ease-out-exact);
+}
+.rail-btn--call { background: var(--dp-gold-500); color: var(--dp-navy-900); }
+.rail-btn--call:hover { background: var(--dp-gold-400); }
+.rail-btn--wa { background: var(--dp-whatsapp-600); color: var(--dp-white); }
+.rail-btn--wa:hover { background: var(--dp-whatsapp-700); }
+.rail-btn:active { transform: scale(0.96); }
+.rail-btn svg { width: 1.5rem; height: 1.5rem; }

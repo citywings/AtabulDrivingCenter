@@ -1,0 +1,184 @@
+/* ==========================================================================
+   ATABUL DRIVING CENTER — DESIGN TOKENS
+   Single source of truth. Every component consumes tokens; no magic numbers.
+   Primary creative principle: "Precision in every pixel. Confidence in every drive."
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     COLOR — core palette
+     ------------------------------------------------------------------ */
+  --dp-navy-900: #0b1b2b; /* Deep Drive Navy — primary brand surface */
+  --dp-navy-800: #132a40; /* Professional Navy — secondary surface */
+  --dp-navy-700: #1d3a55; /* hover elevation of navy-800 */
+  --dp-navy-600: #27507a; /* active elevation, decorative only (3:1 on white) */
+  --dp-gold-500: #c99a2e; /* brand gold — precision accent, never dominant */
+  --dp-gold-400: #dab054; /* gold on navy surfaces */
+  --dp-gold-600: #a87f1f; /* gold hover */
+  --dp-surface: #f5f5f2; /* light surface */
+  --dp-white: #ffffff;
+  --dp-ink: #111820; /* primary text */
+  --dp-muted: #6b737b; /* muted text — 4.5:1+ on white/surface */
+  --dp-muted-dark: #a7b4bf; /* muted text on navy — 4.5:1+ on navy-900 */
+  --dp-border: #d9dde1;
+  --dp-border-strong: #b7bec4;
+
+  /* Semantic states (derived; same visual character) */
+  --dp-success: #1e7a46;
+  --dp-success-bg: #e6f3ec;
+  --dp-warning: #8a6116;
+  --dp-warning-bg: #f8efdc;
+  --dp-error: #b3372e;
+  --dp-error-bg: #f9e9e7;
+  --dp-focus: #c99a2e; /* focus ring — gold, 3:1 against navy and white */
+
+  /* Overlay / scrim */
+  --dp-scrim-hero: rgba(11, 27, 43, 0.55);
+  --dp-scrim-hero-strong: rgba(11, 27, 43, 0.78);
+  --dp-scrim-modal: rgba(11, 27, 43, 0.62);
+
+  /* ------------------------------------------------------------------
+     TYPOGRAPHY
+     ------------------------------------------------------------------ */
+  --dp-font-display: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --dp-font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --dp-font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", "Consolas", monospace;
+
+  --dp-weight-light: 300;
+  --dp-weight-regular: 400;
+  --dp-weight-medium: 500;
+  --dp-weight-semibold: 600;
+  --dp-weight-bold: 700;
+
+  /* Fluid scale */
+  --dp-text-display: clamp(2.75rem, 7vw, 6rem);
+  --dp-text-h1: clamp(2.5rem, 5vw, 4.5rem);
+  --dp-text-h2: clamp(2rem, 4vw, 3.5rem);
+  --dp-text-h3: clamp(1.5rem, 2.4vw, 2rem);
+  --dp-text-h4: 1.25rem;
+  --dp-text-body-lg: clamp(1.0625rem, 1.1vw, 1.125rem);
+  --dp-text-body: 1rem;
+  --dp-text-small: 0.875rem;
+  --dp-text-micro: 0.8125rem;
+
+  --dp-leading-display: 1.04;
+  --dp-leading-heading: 1.15;
+  --dp-leading-body: 1.65;
+  --dp-leading-tight: 1.35;
+
+  --dp-tracking-tight: -0.02em;
+  --dp-tracking-heading: -0.01em;
+  --dp-tracking-label: 0.14em; /* uppercase eyebrows / technical labels only */
+  --dp-tracking-mono: 0.06em;
+
+  /* ------------------------------------------------------------------
+     SPACING — 4px base scale
+     ------------------------------------------------------------------ */
+  --dp-space-4: 0.25rem;
+  --dp-space-8: 0.5rem;
+  --dp-space-12: 0.75rem;
+  --dp-space-16: 1rem;
+  --dp-space-20: 1.25rem;
+  --dp-space-24: 1.5rem;
+  --dp-space-32: 2rem;
+  --dp-space-40: 2.5rem;
+  --dp-space-48: 3rem;
+  --dp-space-64: 4rem;
+  --dp-space-80: 5rem;
+  --dp-space-96: 6rem;
+  --dp-space-120: 7.5rem;
+  --dp-space-160: 10rem;
+
+  /* ------------------------------------------------------------------
+     LAYOUT
+     ------------------------------------------------------------------ */
+  --dp-container: 75rem; /* 1200px */
+  --dp-container-wide: 80rem; /* 1280px */
+  --dp-gutter: clamp(1.25rem, 4vw, 4rem); /* 20 → 64px */
+  --dp-section-pad: clamp(4.5rem, 9vw, 8.5rem); /* 72 → 136px */
+  --dp-grid-columns: 12;
+
+  /* ------------------------------------------------------------------
+     DEVICE CHROME — notch, status bar, home-indicator gesture zone
+     These are 0 unless <meta name="viewport"> declares viewport-fit=cover,
+     so they are safe to consume everywhere. RULE: any edge-anchored
+     `position: fixed` surface MUST consume the insets it touches, otherwise
+     it lands under the notch or the swipe-up gesture zone on every modern
+     iPhone. Enforced by scripts/verify-responsive.mjs.
+     ------------------------------------------------------------------ */
+  --dp-safe-t: env(safe-area-inset-top, 0px);
+  --dp-safe-r: env(safe-area-inset-right, 0px);
+  --dp-safe-b: env(safe-area-inset-bottom, 0px);
+  --dp-safe-l: env(safe-area-inset-left, 0px);
+
+  /* ------------------------------------------------------------------
+     TOUCH — 44px minimum interactive box (WCAG 2.5.5, Apple HIG, Material)
+     ------------------------------------------------------------------ */
+  --dp-tap: 2.75rem; /* 44px */
+  --dp-fab-size: 3.5rem; /* 56px rail button */
+  /* Two stacked 56px targets + the gap: everything that could sit under the
+     fixed rail (toasts) reserves this much, at every width. */
+  --dp-rail-h: calc(2 * var(--dp-fab-size) + var(--dp-space-12));
+  /* WhatsApp's brighter #25D366 puts a white glyph at 2:1 and fails the 3:1
+     non-text floor; the brand's darker green keeps the read, the contrast. */
+  --dp-whatsapp-600: #128c7e;
+  --dp-whatsapp-700: #0f7a6d;
+
+  /* ------------------------------------------------------------------
+     RADII — subtle rectangular geometry, never pill
+     ------------------------------------------------------------------ */
+  --dp-radius-none: 0px;
+  --dp-radius-xs: 2px;
+  --dp-radius-sm: 4px;
+  --dp-radius-md: 6px;
+
+  /* ------------------------------------------------------------------
+     BORDERS
+     ------------------------------------------------------------------ */
+  --dp-border-hairline: 1px solid var(--dp-border);
+  --dp-border-strong-1: 1px solid var(--dp-border-strong);
+  --dp-border-gold: 1px solid var(--dp-gold-500);
+
+  /* ------------------------------------------------------------------
+     SHADOWS — restrained, single-level elevation only
+     ------------------------------------------------------------------ */
+  --dp-shadow-1: 0 1px 2px rgba(11, 27, 43, 0.06), 0 4px 16px rgba(11, 27, 43, 0.07);
+  --dp-shadow-2: 0 2px 6px rgba(11, 27, 43, 0.08), 0 12px 32px rgba(11, 27, 43, 0.12);
+
+  /* ------------------------------------------------------------------
+     Z-INDEX
+     ------------------------------------------------------------------ */
+  --dp-z-base: 1;
+  --dp-z-media: 2;
+  --dp-z-header: 100;
+  --dp-z-dropdown: 200;
+  --dp-z-modal: 300;
+  --dp-z-toast: 400;
+
+  /* ------------------------------------------------------------------
+     BREAKPOINTS (used in JS matchMedia; CSS uses the same values)
+     ------------------------------------------------------------------ */
+  --dp-bp-mobile: 30rem; /* 480 */
+  --dp-bp-tablet: 48rem; /* 768 */
+  --dp-bp-desktop: 64rem; /* 1024 */
+  --dp-bp-wide: 90rem; /* 1440 */
+
+  /* ------------------------------------------------------------------
+     MOTION
+     ------------------------------------------------------------------ */
+  --dp-ease-out-exact: cubic-bezier(0.22, 1, 0.36, 1); /* signature easing */
+  --dp-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dp-dur-micro: 160ms;
+  --dp-dur-ui: 240ms;
+  --dp-dur-reveal: 560ms;
+  --dp-dur-hero: 800ms;
+  --dp-dur-media: 1000ms;
+
+  /* Component-level derivatives */
+  /* 8rem, not 5rem: the brand mark is full-colour artwork carrying its own lettering,
+     and it needs 96-112px of height before every part of it reads. The legibility gate
+     crosses here: 88px measures 15.2% edge density, 96px 14.3%, budget 15%. Everything
+     downstream derives from this token - scroll-padding-top, the mobile bar, the hero's
+     top padding - so the header grows as one number, not as five edits. */
+  --dp-header-h: 8rem;
+}

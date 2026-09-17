@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+
+# Local environment files (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Vite / build caches
+.vite-cache/
+*.log
+
+# Local skill tooling (development aids, not part of the site)
+.skills/
+
+# Device audit output (npm run device:check -- --shots)
+.device-shots/
+.playwright-cli/
+
+# Asset source folder (large source files, not for deployment)
+/Asset/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+temp/

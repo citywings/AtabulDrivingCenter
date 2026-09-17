@@ -1,0 +1,35 @@
+{
+  "name": "atabul-driving-center",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Atabul Driving Center — premium four-wheeler driving education, Kaikhali, Kolkata",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "serve:dist": "node scripts/serve-dist.mjs",
+    "seo:check": "node scripts/verify-seo.mjs",
+    "responsive:check": "node scripts/verify-responsive.mjs",
+    "device:check": "node scripts/device-audit.mjs",
+    "nav:check": "node scripts/nav-audit.mjs",
+    "optimize:media": "node scripts/optimize-media.mjs",
+    "optimize:poster": "node scripts/optimize-poster.mjs",
+    "optimize:brand": "node scripts/optimize-brand.mjs",
+    "optimize:logo:derive": "node scripts/derive-logo.mjs --preview",
+    "brand:mark": "node scripts/optimize-logo.mjs --opaque-ok",
+    "brand:mark:glyph": "node scripts/derive-logo.mjs && node scripts/optimize-logo.mjs --master build/brand-candidates/mark.png",
+    "optimize:logo": "node scripts/optimize-logo.mjs --opaque-ok",
+    "logo:preflight": "node scripts/optimize-logo.mjs --report --opaque-ok",
+    "check:all": "npm run seo:check && npm run responsive:check && npm run device:check && npm run nav:check"
+  },
+  "dependencies": {
+    "lenis": "^1.3.26"
+  },
+  "devDependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

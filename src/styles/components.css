@@ -1,0 +1,642 @@
+/* ==========================================================================
+   ATABUL DRIVING CENTER — COMPONENTS
+   Buttons, links, header/nav, mobile menu, forms, cards, accordion, toast.
+   Every component consumes tokens only — no magic numbers.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   BUTTON
+   Geometry: subtle rectangular. Hierarchy: primary (navy) > secondary
+   (bordered) > accent (gold, reserved for the booking moment on dark).
+   Min touch target 44px. Never pill-shaped.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dp-space-8);
+  min-height: 44px;
+  padding: var(--dp-space-12) var(--dp-space-24);
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-small);
+  font-weight: var(--dp-weight-semibold);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: var(--dp-radius-sm);
+  border: 1px solid transparent;
+  transition:
+    background-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+    border-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+    color var(--dp-dur-ui) var(--dp-ease-out-exact),
+    transform var(--dp-dur-micro) var(--dp-ease-out-exact);
+}
+.btn:active { transform: translateY(1px) scale(0.99); }
+.btn:disabled, .btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+/* The hidden attribute must always win, even over display rules (the booking
+   submit button was rendered on step 1 because .btn's display beat [hidden]) */
+.btn[hidden] { display: none; }
+.btn .btn__icon { width: 1rem; height: 1rem; flex: none; transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact); }
+.btn:hover .btn__icon--arrow { transform: translateX(3px); }
+
+.btn--primary {
+  background: var(--dp-navy-900);
+  color: var(--dp-white);
+}
+.btn--primary:hover { background: var(--dp-navy-800); }
+
+.btn--secondary {
+  background: transparent;
+  color: var(--dp-navy-900);
+  border-color: var(--dp-border-strong);
+}
+.btn--secondary:hover { border-color: var(--dp-navy-900); background: rgba(11, 27, 43, 0.04); }
+
+/* Gold accent — booking CTA on dark surfaces only, used sparingly */
+.btn--accent {
+  background: var(--dp-gold-500);
+  color: var(--dp-navy-900);
+}
+.btn--accent:hover { background: var(--dp-gold-400); }
+
+.btn--ghost-inverse {
+  background: transparent;
+  color: var(--dp-white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.btn--ghost-inverse:hover { border-color: var(--dp-white); background: rgba(255, 255, 255, 0.08); }
+
+/* --------------------------------------------------------------------------
+   TEXT LINK — precise underline indicator
+   -------------------------------------------------------------------------- */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-8);
+  color: var(--dp-navy-900);
+  font-weight: var(--dp-weight-medium);
+  font-size: var(--dp-text-small);
+  text-decoration: none;
+  padding-block: var(--dp-space-4);
+  /* These are conversion CTAs ("Book this programme", "Enquire on call", the
+     phone number), not inline copy — measured at 31px tall they failed the
+     44px promise in §15c on every phone. min-height makes the hit box real
+     rather than faking it with a pseudo-element. */
+  min-height: var(--dp-tap);
+}
+.link .link__icon { width: 1rem; height: 1rem; transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact); }
+.link:hover .link__icon { transform: translateX(3px); }
+
+.link--underline {
+  position: relative;
+}
+.link--underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  /* Anchored to the centred text, not to the grown box: `bottom: 0` would now
+     float the rule ~10px under the label. */
+  top: calc(50% + 0.62em);
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.link--underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --------------------------------------------------------------------------
+   HEADER / NAVIGATION
+   Overlay on hero → solid navy surface on scroll. Animated active marker.
+   -------------------------------------------------------------------------- */
+.header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--dp-z-header);
+  /* The bar grows by the top inset instead of being shaved by it: the 5rem
+     content band stays intact (box-sizing:border-box is global) and the padding
+     pushes the logo clear of the status bar / notch in landscape. */
+  height: calc(var(--dp-header-h) + var(--dp-safe-t));
+  padding-top: var(--dp-safe-t);
+  display: flex;
+  align-items: center;
+  transition:
+    background-color var(--dp-dur-ui) var(--dp-ease-out-exact),
+    box-shadow var(--dp-dur-ui) var(--dp-ease-out-exact),
+    border-color var(--dp-dur-ui) var(--dp-ease-out-exact);
+  border-bottom: 1px solid transparent;
+  /* Permanent readability scrim — logo and nav stay legible over the film */
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 27, 43, 0.82) 0%,
+    rgba(11, 27, 43, 0.55) 62%,
+    rgba(11, 27, 43, 0) 100%
+  );
+}
+.header.is-scrolled {
+  background: rgba(11, 27, 43, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dp-space-24);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Logo lockup — clear space respected, never stretched */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-12);
+  text-decoration: none;
+  color: var(--dp-white);
+}
+/* The ladder ships WebP plus a PNG twin; <picture> resolves between them. display:
+   contents keeps the <img> itself the flex item, so .logo__mark's own flex/size
+   declarations still govern the lockup and the slot does not shift when the sheet
+   lands (it is mirrored in index.html's critical CSS for the same reason). */
+.logo__picture { display: contents; }
+/* The mark is the artwork itself: full colour, its own light ground, and its own
+   lettering sized at ~14% of the mark's height. Height drives and width follows - the
+   file is 380x288, and a square width+height pair *stretches* it, which is what shipped
+   for one revision. Plate treatment so a light rectangle reads as a badge on navy
+   instead of an unstyled image: the radius and gold hairline come from the token set,
+   and the scrim is the drop-shadow that has been here since the SVG mark. */
+.logo__mark {
+  height: clamp(6rem, 5vw + 4.5rem, 7rem);
+  width: auto;
+  flex: none;
+  border-radius: var(--dp-radius-md);
+  border: var(--dp-border-gold);
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55));
+}
+.logo__word {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+.logo__name {
+  font-family: var(--dp-font-display);
+  font-weight: var(--dp-weight-bold);
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dp-white);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+}
+.logo__sub {
+  font-family: var(--dp-font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--dp-gold-400);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Small phones (<360px — §4's compact tier). "ATABUL / DRIVING CENTER" needs
+   44 + 12 + 178 + 12 + 44 = 290px against the 288px a 320px viewport offers, and a
+   shrinkable flex item absorbed the difference by wrapping the label onto two
+   lines: three lines of brand inside an 80px header, with no overflow to complain
+   about. Measured: sub box 156x27 (two lines, 89 + 76) at 320px.
+   Tighten the label's tracking instead of its size (12px is the legibility floor
+   the gates enforce), stop the lockup being the thing that shrinks, and forbid the
+   wrap — so a future overflow fails the device audit loudly instead of quietly
+   reflowing the brand. Mirrored in index.html's critical CSS, because first paint
+   must not differ from the settled one. */
+@media (max-width: 22.4375em) {
+  .logo__word { flex: none; }
+  .logo__name { white-space: nowrap; }
+  .logo__sub { letter-spacing: 0.2em; white-space: nowrap; }
+}
+
+.nav-desktop { display: none; }
+@media (min-width: 64em) {
+  .nav-desktop { display: block; }
+}
+.nav-desktop__list {
+  display: flex;
+  align-items: center;
+  gap: var(--dp-space-16);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media (min-width: 72em) {
+  .nav-desktop__list { gap: var(--dp-space-24); }
+}
+.nav-desktop__link {
+  position: relative;
+  display: inline-block;
+  /* 42px measured at 1024px — which is an iPad Pro portrait, i.e. a touch
+     device wearing the desktop nav. padding alone kept it under the promise. */
+  min-height: var(--dp-tap);
+  /* Width via min-width, not padding: 8 links × 16px of padding did not fit the
+     header at exactly 1024px and pushed the CTA off-canvas (caught by the real
+     browser run). min-width only grows the two short words that need it. */
+  min-width: var(--dp-tap);
+  text-align: center;
+  padding: var(--dp-space-12) 0;
+  font-size: var(--dp-text-body);
+  font-weight: var(--dp-weight-semibold);
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  text-decoration: none;
+  transition: color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.nav-desktop__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 2px;
+  background: var(--dp-gold-500);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.nav-desktop__link:hover { color: var(--dp-white); }
+.nav-desktop__link:hover::after,
+.nav-desktop__link.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.nav-desktop__link.is-active { color: var(--dp-white); }
+
+.header__cta { display: none; }
+@media (min-width: 48em) {
+  .header__cta { display: inline-flex; }
+}
+
+/* Mobile menu — premium deliberate overlay, not a default drawer */
+.nav-mobile-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--dp-white);
+  border-radius: var(--dp-radius-sm);
+}
+/* Deliberately placed AFTER the base rule: both are specificity 0-1-0, so the
+   later one wins. Hiding it from the `min-width: 64em` block above lost the
+   cascade, and the real browser showed the hamburger next to the desktop nav. */
+@media (min-width: 64em) { .nav-mobile-toggle { display: none; } }
+/* Fail-open, and navigation is the thing that most needs it: below 64em the
+   overlay *is* the navigation, so a phone visitor on a deploy whose bundle 404s
+   would get a hamburger that does nothing and no way to move. Without the `js`
+   class the toggle steps aside and the real link list shows in the header. */
+html:not(.js) .nav-mobile-toggle { display: none; }
+html:not(.js) .nav-desktop { display: block; }
+html:not(.js) .header { height: auto; }
+html:not(.js) .header__inner { flex-wrap: wrap; row-gap: var(--dp-space-8); padding-block: var(--dp-space-8); }
+html:not(.js) .nav-desktop__list { flex-wrap: wrap; gap: var(--dp-space-4) var(--dp-space-16); }
+.nav-mobile-toggle__bars { width: 1.25rem; height: 0.875rem; position: relative; }
+.nav-mobile-toggle__bars span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact), opacity var(--dp-dur-micro) linear, top var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.nav-mobile-toggle__bars span:nth-child(1) { top: 0; }
+.nav-mobile-toggle__bars span:nth-child(2) { top: calc(50% - 1px); }
+.nav-mobile-toggle__bars span:nth-child(3) { top: 100%; transform: translateY(-100%); }
+.nav-mobile-toggle[aria-expanded="true"] span:nth-child(1) { top: calc(50% - 1px); transform: rotate(45deg); }
+.nav-mobile-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-mobile-toggle[aria-expanded="true"] span:nth-child(3) { top: calc(50% - 1px); transform: translateY(-50%) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--dp-z-modal);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--dp-navy-900);
+  color: var(--dp-white);
+  /* Eight display-size links (up to 2.25rem text + 2×1rem padding ≈ 58px each)
+     plus the footer CTAs are ~640px tall, which exceeds every landscape phone
+     and most portrait ones once the URL bar is counted. The panel has to
+     scroll, and must not chain that scroll into the page behind the overlay.
+     The 1fr middle row already has a min-content floor, so it grows to fit. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(var(--dp-space-24) + var(--dp-safe-t)) calc(var(--dp-gutter) + var(--dp-safe-r)) calc(var(--dp-space-40) + var(--dp-safe-b)) calc(var(--dp-gutter) + var(--dp-safe-l));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dp-dur-ui) var(--dp-ease-out-exact), visibility 0s linear var(--dp-dur-ui);
+}
+.mobile-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.mobile-menu__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(var(--dp-header-h) - var(--dp-space-24));
+}
+.mobile-menu nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mobile-menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dp-space-16);
+  padding: var(--dp-space-16) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--dp-white);
+  text-decoration: none;
+  font-family: var(--dp-font-display);
+  font-size: clamp(1.625rem, 6.5vw, 2.25rem);
+  font-weight: var(--dp-weight-regular);
+  transform: translateY(0.75rem);
+  opacity: 0;
+  transition:
+    opacity var(--dp-dur-reveal) var(--dp-ease-out-exact),
+    transform var(--dp-dur-reveal) var(--dp-ease-out-exact),
+    color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.mobile-menu.is-open .mobile-menu__link {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(60ms + var(--i, 0) * 40ms);
+}
+.mobile-menu__link:hover { color: var(--dp-gold-400); }
+.mobile-menu__index {
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  color: var(--dp-gold-400);
+  letter-spacing: var(--dp-tracking-mono);
+}
+.mobile-menu__foot {
+  display: grid;
+  gap: var(--dp-space-16);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu, .mobile-menu__link { transition: none; transform: none; opacity: 1; }
+  .mobile-menu { visibility: hidden; }
+  .mobile-menu.is-open { visibility: visible; }
+}
+
+/* --------------------------------------------------------------------------
+   BADGE / PILL — quiet metadata
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dp-space-8);
+  padding: var(--dp-space-4) var(--dp-space-12);
+  font-family: var(--dp-font-mono);
+  font-size: var(--dp-text-micro);
+  letter-spacing: var(--dp-tracking-mono);
+  text-transform: uppercase;
+  color: var(--dp-muted);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-xs);
+  background: var(--dp-white);
+}
+.badge--gold { color: var(--dp-gold-600); border-color: var(--dp-gold-500); }
+.badge__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--dp-gold-500);
+  flex: none;
+}
+
+/* --------------------------------------------------------------------------
+   CARDS — restrained surfaces, strong hierarchy, minimal border
+   -------------------------------------------------------------------------- */
+.card {
+  background: var(--dp-white);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius-md);
+  transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.card:hover { border-color: var(--dp-border-strong); }
+
+/* --------------------------------------------------------------------------
+   FORM FIELD
+   -------------------------------------------------------------------------- */
+.field { display: grid; gap: var(--dp-space-8); }
+.field__label {
+  font-size: var(--dp-text-small);
+  font-weight: var(--dp-weight-medium);
+  color: var(--dp-navy-900);
+}
+.field__hint { font-size: var(--dp-text-micro); color: var(--dp-muted); }
+.field__error {
+  display: none;
+  align-items: center;
+  gap: var(--dp-space-8);
+  font-size: var(--dp-text-micro);
+  font-weight: var(--dp-weight-medium);
+  color: var(--dp-error);
+}
+.field.has-error .field__error { display: inline-flex; }
+/* Radio groups: the error <p> sits directly in the fieldset/pane */
+.booking__pane.has-error .field__error { display: inline-flex; }
+.booking__pane.has-error .option__check { border-color: var(--dp-error); }
+.field.has-error .input, .field.has-error .select, .field.has-error .textarea {
+  border-color: var(--dp-error);
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--dp-space-12) var(--dp-space-16);
+  font-size: var(--dp-text-body);
+  color: var(--dp-ink);
+  background: var(--dp-white);
+  border: 1px solid var(--dp-border-strong);
+  border-radius: var(--dp-radius-sm);
+  transition: border-color var(--dp-dur-micro) linear, box-shadow var(--dp-dur-micro) linear;
+}
+.textarea { resize: vertical; min-height: 6rem; }
+.input:hover, .select:hover, .textarea:hover { border-color: var(--dp-navy-600); }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible {
+  outline: none;
+  border-color: var(--dp-navy-900);
+  box-shadow: 0 0 0 3px rgba(201, 154, 46, 0.35);
+}
+.input::placeholder, .textarea::placeholder { color: var(--dp-border-strong); }
+.input, .select, .textarea { font-variant-numeric: tabular-nums; }
+
+/* Option cards (programme / experience / time selection) */
+.option-grid { display: grid; gap: var(--dp-space-12); }
+.option {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dp-space-12);
+  padding: var(--dp-space-16) var(--dp-space-24);
+  min-height: 44px;
+  border: 1px solid var(--dp-border-strong);
+  border-radius: var(--dp-radius-sm);
+  background: var(--dp-white);
+  cursor: pointer;
+  transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact), background-color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.option:hover { border-color: var(--dp-navy-600); }
+.option__input { position: absolute; opacity: 0; pointer-events: none; }
+.option__check {
+  width: 1rem; height: 1rem;
+  margin-top: 3px;
+  flex: none;
+  border: 1.5px solid var(--dp-border-strong);
+  border-radius: 50%;
+  transition: border-color var(--dp-dur-micro) linear, box-shadow var(--dp-dur-micro) linear;
+}
+.option__text { display: grid; gap: 2px; }
+.option__title { font-weight: var(--dp-weight-medium); font-size: var(--dp-text-small); }
+.option__desc { font-size: var(--dp-text-micro); color: var(--dp-muted); }
+.option:has(.option__input:checked) {
+  border-color: var(--dp-navy-900);
+  background: rgba(19, 42, 64, 0.04);
+}
+.option:has(.option__input:checked) .option__check {
+  border-color: var(--dp-gold-500);
+  box-shadow: inset 0 0 0 3px var(--dp-white), inset 0 0 0 8px var(--dp-gold-500);
+}
+.option:has(.option__input:focus-visible) { outline: 2px solid var(--dp-focus); outline-offset: 2px; }
+
+/* Checkbox */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dp-space-12);
+  font-size: var(--dp-text-small);
+  color: var(--dp-muted);
+  cursor: pointer;
+}
+.consent input {
+  width: 1.125rem; height: 1.125rem;
+  margin-top: 2px;
+  accent-color: var(--dp-navy-900);
+  flex: none;
+}
+.consent a { color: var(--dp-navy-900); }
+
+/* --------------------------------------------------------------------------
+   ACCORDION (FAQ)
+   -------------------------------------------------------------------------- */
+.accordion { border-top: 1px solid var(--dp-border); }
+.accordion__item { border-bottom: 1px solid var(--dp-border); }
+.accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dp-space-24);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--dp-space-24) 0;
+  text-align: left;
+  font-family: var(--dp-font-display);
+  font-size: var(--dp-text-h4);
+  font-weight: var(--dp-weight-regular);
+  color: var(--dp-navy-900);
+  transition: color var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.accordion__trigger:hover { color: var(--dp-navy-600); }
+.accordion__icon {
+  width: 1.125rem; height: 1.125rem;
+  flex: none;
+  color: var(--dp-gold-600);
+  transition: transform var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.accordion__trigger[aria-expanded="true"] .accordion__icon { transform: rotate(45deg); }
+.accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.accordion__panel.is-open { grid-template-rows: 1fr; }
+/* Fail-open, same doctrine as .booking__pane and the reveal states: with no JS
+   nothing can ever add .is-open, so a JS-off visitor would get seven collapsed
+   stubs. Crawlers see the text either way; this is for the human. */
+html:not(.js) .accordion__panel { grid-template-rows: 1fr; }
+.accordion__panel-inner { overflow: hidden; }
+.accordion__panel p {
+  padding-bottom: var(--dp-space-24);
+  max-width: 62ch;
+  color: var(--dp-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .accordion__panel { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   TOAST
+   -------------------------------------------------------------------------- */
+.toast-region {
+  position: fixed;
+  /* The contact rail is pinned bottom-right at every width and these toasts are
+     bottom-centre — and the toast is precisely the message that explains why a
+     booking was rejected, so a 56px circle sitting on top of it defeats the
+     purpose. The region parks above the rail on phones and small tablets, and
+     always clears the home-indicator gesture zone. */
+  bottom: calc(var(--dp-space-24) + var(--dp-safe-b));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--dp-z-toast);
+  display: grid;
+  gap: var(--dp-space-8);
+  width: min(92vw, 26rem);
+  /* Separate declaration so an engine that cannot resolve env() here loses the
+     cap rather than the whole width. */
+  max-width: calc(100vw - var(--dp-safe-l) - var(--dp-safe-r) - var(--dp-space-32));
+}
+@media (max-width: 63.9375em) {
+  /* The rail is two stacked 56px buttons, not one — a centred toast at 92vw
+     would otherwise sit under the WhatsApp button. Measured: a centred
+     min(92vw, 26rem) region only reaches the rail below ~609px, so the lift
+     stays inside the existing 64em band rather than becoming unconditional. */
+  .toast-region { bottom: calc(var(--dp-rail-h) + var(--dp-space-24) + var(--dp-safe-b)); }
+}
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dp-space-12);
+  padding: var(--dp-space-16) var(--dp-space-24);
+  background: var(--dp-navy-900);
+  color: var(--dp-white);
+  border-radius: var(--dp-radius-sm);
+  border-left: 2px solid var(--dp-gold-500);
+  box-shadow: var(--dp-shadow-2);
+  font-size: var(--dp-text-small);
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity var(--dp-dur-ui) var(--dp-ease-out-exact), transform var(--dp-dur-ui) var(--dp-ease-out-exact);
+}
+.toast.is-shown { opacity: 1; transform: none; }
+.toast__icon { width: 1.125rem; height: 1.125rem; flex: none; color: var(--dp-gold-400); margin-top: 2px; }
+
+/* --------------------------------------------------------------------------
+   SECTION HEADING rhythm
+   -------------------------------------------------------------------------- */
+.section-head {
+  display: grid;
+  gap: var(--dp-space-16);
+  max-width: 44rem;
+  margin-bottom: var(--dp-space-64);
+}
+.section-head--on-navy .eyebrow { color: var(--dp-muted-dark); }
+.section-head--on-navy .lead { color: var(--dp-muted-dark); }
