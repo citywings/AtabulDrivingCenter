@@ -239,6 +239,10 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     needs: [build, test]
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -247,21 +251,25 @@ jobs:
           path: dist/
 
       - name: Deploy to Vercel Preview
+        if: env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != ''
         uses: amondnet/vercel-action@v25
-        if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod=false'
         env:
-          VITE_SITE_URL: ${{ steps.vercel-outputs.outputs.url }}
+          VITE_SITE_URL: https://atabuldrivingcenter.com
 
   deploy-production:
     name: Deploy Production (main branch only)
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [build, test]
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -270,8 +278,8 @@ jobs:
           path: dist/
 
       - name: Deploy to Vercel Production
+        if: env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != ''
         uses: amondnet/vercel-action@v25
-        if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
