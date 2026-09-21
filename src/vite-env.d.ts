@@ -34,5 +34,5 @@ interface Window {
    * initSmoothScroll for devtools and for scripts/device-audit.mjs, which needs
    * to move the page past Lenis's rAF scroll rewriting.
    */
-  __dpLenis?: { scrollTo: (target: number | HTMLElement | string, opts?: { immediate?: boolean }) => void } | null;
+  __dpLenis?: { scrollTo: (_target: number | HTMLElement | string, _opts?: { immediate?: boolean }) => void } | null;
 }

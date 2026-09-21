@@ -8,11 +8,6 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 // Use type assertions via unknown to satisfy TypeScript - all feature modules export an init() function
 const featureLoaders = [
   {
-    selector: "#reviews",
-    importFn: () => import("@/features/reviews-marquee") as unknown as Promise<{ init(): void }>,
-    rootMargin: "200px",
-  },
-  {
     selector: "#faq",
     importFn: () => import("@/features/accordion") as unknown as Promise<{ init(): void }>,
     rootMargin: "200px",

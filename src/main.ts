@@ -18,6 +18,7 @@ import Lenis from "lenis";
 import { assets } from "@/config/assets";
 import { initGreeting } from "./components/greeting";
 import { init as initBooking } from "./features/booking";
+import { init as initReviewsCarousel } from "./features/reviews-marquee";
 import { initLazyFeatures } from "./features/lazy-loader";
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -419,6 +420,7 @@ for (const step of [
   initMobileMenu,
   initProgrammePreselect,
   initBooking,
+  initReviewsCarousel,
 ]) {
   try {
     step();
