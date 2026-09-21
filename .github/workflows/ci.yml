@@ -84,154 +84,25 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start preview server
-        run: npx vite preview --port 4173 --host 0.0.0.0 &
-        shell: bash
+      - name: Run Playwright tests
+        run: npx playwright test
         env:
           VITE_SITE_URL: https://atabuldrivingcenter.com
 
-      - name: Wait for server
-        run: sleep 5 && curl -f http://localhost:4173 || exit 1
-        shell: bash
-
-      - name: Run Playwright tests
-        run: |
-          cat > /tmp/ci-qa-test.js << 'EOF'
-          const { chromium } = require('playwright');
-
-          const TARGET_URL = 'http://localhost:4173';
-
-          (async () => {
-            const browser = await chromium.launch({ headless: true });
-            const page = await browser.newPage();
-
-            const results = {
-              passed: 0,
-              failed: 0,
-              issues: []
-            };
-
-            function logTest(name, passed, details = '') {
-              if (passed) {
-                results.passed++;
-                console.log(`✅ ${name}`);
-              } else {
-                results.failed++;
-                results.issues.push({ test: name, details });
-                console.log(`❌ ${name} - ${details}`);
-              }
-            }
-
-            try {
-              await page.goto(TARGET_URL, { waitUntil: 'networkidle', timeout: 30000 });
-              await page.waitForTimeout(2000);
-
-              logTest('Page loads successfully', true, `Title: ${await page.title()}`);
-              
-              const heroVisible = await page.isVisible('.hero');
-              logTest('Hero section visible', heroVisible);
-
-              const posterLoaded = await page.evaluate(() => {
-                const img = document.querySelector('.hero__picture img');
-                return img && img.complete && img.naturalWidth > 0;
-              });
-              logTest('Hero poster image loaded', posterLoaded);
-
-              const navLinks = await page.locator('.nav-desktop__link, .mobile-menu__link').all();
-              logTest('Navigation links present', navLinks.length > 0, `Found ${navLinks.length} links`);
-
-              await page.evaluate(() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }));
-              await page.waitForTimeout(1000);
-              logTest('About section reachable', await page.isVisible('#about'));
-
-              await page.evaluate(() => document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' }));
-              await page.waitForTimeout(1500);
-              
-              const carouselDots = await page.locator('.carousel-dot').all();
-              logTest('Carousel pagination dots visible', carouselDots.length > 0, `Found ${carouselDots.length} dots`);
-
-              const prevBtn = await page.isVisible('[data-carousel-prev]');
-              const nextBtn = await page.isVisible('[data-carousel-next]');
-              logTest('Carousel navigation buttons visible', prevBtn && nextBtn);
-
-              if (nextBtn) {
-                await page.click('[data-carousel-next]');
-                await page.waitForTimeout(500);
-                const trackTransform = await page.evaluate(() => {
-                  const track = document.querySelector('[data-carousel-track]');
-                  return track ? track.style.transform : 'none';
-                });
-                logTest('Carousel next button navigates', trackTransform !== 'none' && trackTransform !== 'translateX(0px)');
-              }
-
-              await page.evaluate(() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' }));
-              await page.waitForTimeout(1500);
-              logTest('Booking form visible (eager load)', await page.isVisible('#booking-form'));
-
-              const programmeRadios = await page.locator('input[name="programme"]').all();
-              logTest('Booking Step 1 radio options visible immediately', programmeRadios.length > 0);
-
-              const googleLink = await page.locator('a[href*="google.com/maps/place/ATABUL"]').first();
-              logTest('Google Maps link correct', await googleLink.count() > 0);
-
-              const consoleErrors = [];
-              page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
-              page.on('pageerror', err => consoleErrors.push(err.message));
-              await page.reload({ waitUntil: 'networkidle' });
-              await page.waitForTimeout(2000);
-              logTest('No JavaScript console errors', consoleErrors.length === 0, consoleErrors.length > 0 ? consoleErrors.join('; ') : '');
-
-              // Mobile viewport
-              await page.setViewportSize({ width: 375, height: 667 });
-              await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
-              await page.waitForTimeout(1500);
-              logTest('Mobile - Hero visible', await page.isVisible('.hero'));
-              logTest('Mobile - Carousel dots visible', (await page.locator('.carousel-dot').all()).length > 0);
-              logTest('Mobile - Booking form visible', await page.isVisible('#booking-form'));
-
-              // Tablet viewport
-              await page.setViewportSize({ width: 768, height: 1024 });
-              await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
-              await page.waitForTimeout(1500);
-              logTest('Tablet - Carousel dots visible', (await page.locator('.carousel-dot').all()).length > 0);
-
-              await page.screenshot({ path: '/tmp/ci-desktop.png', fullPage: true });
-              await page.setViewportSize({ width: 375, height: 667 });
-              await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
-              await page.screenshot({ path: '/tmp/ci-mobile.png', fullPage: true });
-
-            } catch (error) {
-              console.error('Test error:', error.message);
-              results.failed++;
-              results.issues.push({ test: 'Test execution', details: error.message });
-            }
-
-            await browser.close();
-
-            console.log('\n=== CI QA SUMMARY ===');
-            console.log(`Passed: ${results.passed}`);
-            console.log(`Failed: ${results.failed}`);
-            console.log(`Total:  ${results.passed + results.failed}`);
-            
-            if (results.issues.length > 0) {
-              console.log('\nIssues:');
-              results.issues.forEach((issue, i) => console.log(`  ${i + 1}. ${issue.test}: ${issue.details}`));
-            }
-            
-            const healthScore = Math.round((results.passed / (results.passed + results.failed)) * 100);
-            console.log(`\nHealth Score: ${healthScore}%`);
-            
-            process.exit(results.failed > 0 ? 1 : 0);
-          })();
-          EOF
-          node /tmp/ci-qa-test.js
-
-      - name: Upload screenshots
+      - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
           name: playwright-screenshots
-          path: /tmp/ci-*.png
+          path: test-results/
           retention-days: 7
 
   deploy-preview:
