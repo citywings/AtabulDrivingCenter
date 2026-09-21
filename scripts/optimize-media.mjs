@@ -97,12 +97,13 @@ try {
   );
 
   // 2. Desktop web master — 1280w H.264, capped bitrate, faststart, silent.
+  // CRF 34 + slower preset for aggressive compression at acceptable quality
   await run(
     [
       "-i", master,
       "-vf", "scale='min(1280,iw)':-2:flags=lanczos",
-      "-c:v", "libx264", "-preset", "medium", "-crf", "25",
-      "-maxrate", "2200k", "-bufsize", "4400k",
+      "-c:v", "libx264", "-preset", "slow", "-crf", "34",
+      "-maxrate", "500k", "-bufsize", "1000k",
       "-pix_fmt", "yuv420p",
       "-an", "-movflags", "+faststart",
       v1280,
@@ -111,12 +112,13 @@ try {
   );
 
   // 3. Mobile web master — 720w, tighter bitrate.
+  // CRF 36 for mobile, smaller viewport needs less detail
   await run(
     [
       "-i", master,
       "-vf", "scale='min(720,iw)':-2:flags=lanczos",
-      "-c:v", "libx264", "-preset", "medium", "-crf", "27",
-      "-maxrate", "1200k", "-bufsize", "2400k",
+      "-c:v", "libx264", "-preset", "slow", "-crf", "36",
+      "-maxrate", "300k", "-bufsize", "600k",
       "-pix_fmt", "yuv420p",
       "-an", "-movflags", "+faststart",
       v720,

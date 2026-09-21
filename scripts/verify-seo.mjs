@@ -43,8 +43,9 @@ const hiddenRules = [...cssAll.matchAll(/([^{}]*\.reveal[^{}]*)\{([^}]*)\}/g)]
 check("Crawl", "every reveal hidden-state is gated behind the .js class",
   hiddenRules.length > 0 && hiddenRules.every((m) => /\.js\s/.test(m[1])),
   `${hiddenRules.length} hidden-state rules, all .js-prefixed`);
-check("Crawl", "hero stagger hidden state is .js-gated in the critical CSS",
-  /\.js \.hero-stagger > \* \{ opacity: 0; \}/.test(html));
+check("Crawl", "hero stagger uses CSS animation (visible immediately, no JS gate needed)",
+  /@keyframes hero-in/.test(html) && /\.hero-stagger > \*[^}]*animation: hero-in/.test(html),
+  "CSS animation approach verified");
 check("Crawl", "boot watchdog strips .js if the module never runs",
   /__dpBooted/.test(html) && /classList\.remove\("js"\)/.test(html) && /window\.__dpBooted = true/.test(readFileSync("src/main.ts", "utf8")));
 check("Crawl", "noscript fallback for the JS-only booking flow", /<noscript>[\s\S]*tel:\+91/.test(html));
@@ -72,6 +73,11 @@ const missing = [...refs]
   .map((r) => r.replace(/^\.\//, "").split("?")[0])
   .filter((r) => !existsSync(join(DIST, r)));
 check("Links", `all ${refs.size} local references resolve in dist/`, missing.length === 0, missing.join(", "));
+
+// Determine origin from canonical for third-party subresource check
+const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
+const origin = canonical ? new URL(canonical).origin : "http://localhost:5173";
+
 // What the browser actually FETCHES at load: src=, srcset=, preload/
 // preconnect links, and CSS url(). Outbound <a href> is navigation, not a
 // subresource, so it must not count against the zero-third-party claim.
@@ -95,8 +101,6 @@ check("Links", "no absolute localhost URLs baked into asset refs",
   !/(?:href|src|srcset)="\/?\/?localhost/.test(html));
 
 /* ---------------- 4. head metadata ------------------------------------- */
-const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
-const origin = canonical ? new URL(canonical).origin : "";
 check("Head", "canonical present and self-referencing", canonical === `${origin}/`, canonical ?? "MISSING");
 check("Head", "noindex absent (page is meant to rank)",
   !/content="[^"]*noindex/.test(html));

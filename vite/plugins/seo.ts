@@ -67,8 +67,10 @@ const PLACEHOLDER_PATTERNS = [
 
 /** Performance budgets (raw KB). These are the SEO-visible ones: LCP + render. */
 const BUDGETS = {
-  "hero-fallback.avif": 120,
-  "hero-fallback.webp": 170,
+  "hero-fallback.avif": 80,
+  "hero-fallback-900.avif": 50,
+  "hero-fallback.webp": 120,
+  "hero-fallback-900.webp": 80,
   "hero-fallback.jpg": 240,
   entryJs: 60,
   entryCss: 60,
@@ -516,7 +518,7 @@ export function seoPlugin(options: SeoPluginOptions = {}): Plugin {
       if (videoCount !== ruleClips.length)
         fail(`only ${videoCount}/${ruleClips.length} rule clips resolved to VideoObject nodes (missing/unreadable mp4s)`);
       const serviceCount = byType("Service").length;
-      if (serviceCount !== 3) fail(`expected 3 Service nodes for the published programmes, found ${serviceCount}`);
+      if (serviceCount !== 4) fail(`expected 4 Service nodes for the published programmes, found ${serviceCount}`);
 
       /* --- performance budgets (LCP + render-blocking) ------------------- */
 

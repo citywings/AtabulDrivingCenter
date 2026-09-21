@@ -8,8 +8,8 @@
  *
  * To swap media: replace the file under src/assets/<domain>/ and keep the ID.
  */
-import heroDesktop from "@/assets/hero/hero-primary-1280.mp4";
-import heroMobile from "@/assets/hero/hero-primary-720.mp4";
+import heroDesktopH264 from "@/assets/hero/hero-primary-1280.mp4";
+import heroMobileH264 from "@/assets/hero/hero-primary-720.mp4";
 import heroPoster from "@/assets/hero/hero-poster.jpg";
 import instructorPortrait from "@/assets/instructors/instructor-primary.webp";
 
@@ -17,8 +17,13 @@ export const assets = {
   hero: {
     /** Cinematic hero film — right-hand-drive cockpit, Indian roads. */
     primary: {
-      desktop: heroDesktop, // ≥768px viewport
-      mobile: heroMobile, // <768px viewport
+      /** H.264/AVC — universal fallback (all browsers) */
+      desktop: {
+        h264: heroDesktopH264,
+      },
+      mobile: {
+        h264: heroMobileH264,
+      },
       poster: heroPoster, // LCP poster / reduced-motion / no-autoplay fallback
     },
   },

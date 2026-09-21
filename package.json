@@ -25,7 +25,8 @@
     "check:all": "npm run seo:check && npm run responsive:check && npm run device:check && npm run nav:check"
   },
   "dependencies": {
-    "lenis": "^1.3.26"
+    "lenis": "^1.3.26",
+    "playwright": "^1.63.0"
   },
   "devDependencies": {
     "ffmpeg-static": "^5.2.0",

@@ -211,8 +211,8 @@ h1, h2, h3, h4 {
 }
 
 /* Hero entrance — pure CSS load animation. Runs at first paint in every
-   environment with no JS dependency (index.html gates visibility inline), so
-   the hero never pops in late. `both` keeps children hidden during delays. */
+   environment with no JS dependency, so the hero never pops in late.
+   `both` keeps children hidden during delays. */
 @keyframes hero-in {
   from { opacity: 0; transform: translateY(1.5rem); }
   to { opacity: 1; transform: none; }
@@ -229,6 +229,8 @@ h1, h2, h3, h4 {
 @media (prefers-reduced-motion: reduce) {
   .hero-stagger > * {
     animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 

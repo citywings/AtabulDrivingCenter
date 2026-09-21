@@ -15,35 +15,42 @@
         }, 3000);
       })();
     </script>
-    <style>
-      /* Critical inline CSS — prevents the pre-stylesheet flash (giant logo
-         SVG renders 300x150 by default, unstyled text runs huge) in the window
-         before the main stylesheet applies. Values mirror tokens.css and
-         components.css as LITERALS, because custom properties do not exist until
-          tokens.css has loaded. npm run responsive:check parses this block and
-          compares every logo declaration against the stylesheet, so a forgotten
-          value fails the build instead of flickering on screen. */
-      html { background: #0b1b2b; }
-      body { margin: 0; background: #0b1b2b; }
-      .header { height: 8rem; display: flex; align-items: center; }
-      .header .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-      .logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #ffffff; }
-      .logo__picture { display: contents; }
-      .logo__mark { height: clamp(6rem, 5vw + 4.5rem, 7rem); width: auto; flex: none; border-radius: 6px; border: 1px solid #c99a2e; }
-      .logo__word { display: flex; flex-direction: column; line-height: 1.05; }
-      .logo__name { font-family: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: 0.06em; text-transform: uppercase; color: #ffffff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65); }
-      .logo__sub { font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", "Consolas", monospace; font-size: 0.8125rem; letter-spacing: 0.38em; text-transform: uppercase; color: #dab054; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
-      /* components.css's small-phone tier, mirrored: without this the wordmark
-         reflows at 320px the moment the stylesheet lands. */
-      @media (max-width: 22.4375em) {
-        .logo__word { flex: none; }
-        .logo__name { white-space: nowrap; }
-        .logo__sub { letter-spacing: 0.2em; white-space: nowrap; }
-      }
-      .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; background: #0b1b2b; }
-      .hero__media img, .hero__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-      .hero__media picture { display: contents; }
-      .js .hero-stagger > * { opacity: 0; }
+<style>
+      /* Critical inline CSS — ONLY what prevents FOUC/CLS before stylesheet loads.
+         Values mirror tokens.css/components.css as LITERALS (custom properties
+         don't exist until tokens.css loads). Kept minimal for HTML size budget. */
+      html{background:#0b1b2b}body{margin:0;background:#0b1b2b}
+      .header{height:8rem;display:flex;align-items:center;background:linear-gradient(to bottom,rgba(11,27,43,.92)0%,rgba(11,27,43,.75)62%,rgba(11,27,43,.35)100%);border-bottom:1px solid transparent}
+      .header.is-scrolled{background:rgba(11,27,43,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom-color:rgba(255,255,255,.08)}
+      .header .container{display:flex;align-items:center;justify-content:space-between;width:100%}
+      .logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+      .logo__picture{display:contents}
+      .logo__mark{height:96px;width:auto;flex:none;border-radius:6px;border:1px solid #c99a2e}
+      .logo__word{display:flex;flex-direction:column;line-height:1.05}
+      .logo__name{font-family:"Manrope Variable","Manrope",ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:1.5rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.65)}
+      .logo__sub{font-family:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:.8125rem;letter-spacing:.38em;text-transform:uppercase;color:#dab054;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+      @media(max-width:22.4375em){.logo__word{flex:none}.logo__name{white-space:nowrap}.logo__sub{letter-spacing:.2em;white-space:nowrap}.logo__mark{height:80px}}
+      /* Nav links — prevent blue FOUC on desktop */
+      .nav-desktop{display:none}
+      @media(min-width:64em){.nav-desktop{display:block}}
+      .nav-desktop__list{display:flex;align-items:center;gap:16px;list-style:none;margin:0;padding:0}
+      @media(min-width:72em){.nav-desktop__list{gap:24px}}
+      .nav-desktop__link{position:relative;display:inline-block;min-height:44px;min-width:44px;text-align:center;padding:12px 0;font-size:1rem;font-weight:600;color:rgba(255,255,255,.96);text-shadow:0 1px 6px rgba(0,0,0,.6);text-decoration:none;transition:color .24s cubic-bezier(.22,1,.36,1)}
+      .nav-desktop__link::after{content:"";position:absolute;left:0;bottom:2px;width:100%;height:2px;background:#c99a2e;transform:scaleX(0);transform-origin:right;transition:transform .24s cubic-bezier(.22,1,.36,1)}
+      .nav-desktop__link:hover{color:#fff}
+      .nav-desktop__link:hover::after,.nav-desktop__link.is-active::after{transform:scaleX(1);transform-origin:left}
+      .nav-desktop__link.is-active{color:#fff}
+      .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:#0b1b2b}
+      .hero__media img,.hero__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+      .hero__media picture{display:contents}
+      .hero-stagger>*{animation:hero-in .7s cubic-bezier(.22,1,.36,1) both}
+      .hero-stagger>*:nth-child(1){animation-delay:80ms}
+      .hero-stagger>*:nth-child(2){animation-delay:200ms}
+      .hero-stagger>*:nth-child(3){animation-delay:340ms}
+      .hero-stagger>*:nth-child(4){animation-delay:480ms}
+      .hero-stagger>*:nth-child(5){animation-delay:620ms}
+      @keyframes hero-in{from{opacity:0;transform:translateY(1.5rem)}to{opacity:1;transform:none}}
+      @media(prefers-reduced-motion:reduce){.hero-stagger>*{animation:none;opacity:1;transform:none}}
     </style>
     <!-- viewport-fit=cover is what makes the safe-area insets non-zero; the
          edge-anchored fixed surfaces in base/components/sections consume them
@@ -57,17 +64,25 @@
     <meta name="theme-color" content="#0b1b2b" />
     <link rel="icon" type="image/png" sizes="32x32" href="./brand/favicon-32.png" />
     <link rel="apple-touch-icon" href="./brand/apple-touch-icon.png" />
+    <!-- Resource hints for faster font loading and connections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <!-- Critical-path preloads: brand fonts arrive before first paint (no
          fallback-font flash) and the LCP hero poster starts immediately.
          The AVIF is the LCP candidate the <picture> below resolves to.
          imagesrcset/imagesizes MUST mirror the <source> exactly, or every phone
          preloads the 1600w file (53 KB) instead of the 900w one (27.5 KB) and
          the browser additionally warns that the preload went unused. `href`
-         stays as the fallback for engines without imagesrcset support. -->
+         stays as the fallback for engines without imagesrcset support.
+         Fonts are preloaded from public/fonts (stable URLs) while CSS imports
+         from src/assets/fonts for build-time fingerprinting. -->
     <link rel="preload" as="font" type="font/woff2" href="./fonts/manrope-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="./fonts/inter-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="./fonts/plex-mono-400-latin.woff2" crossorigin />
     <link rel="preload" as="image" type="image/avif" fetchpriority="high" href="./hero-fallback.avif" imagesrcset="./hero-fallback-900.avif 900w, ./hero-fallback.avif 1600w" imagesizes="100vw" />
+    <!-- Preload instructor portrait (below-fold but important) -->
+    <link rel="preload" as="image" type="image/webp" href="./instructor-primary.webp" fetchpriority="low" />
     <!-- Canonical, robots directive, og:* and twitter:* with absolute URLs -->
     <link rel="canonical" href="http://localhost:5173/" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -169,6 +184,9 @@
         },
         {
           "@id": "http://localhost:5173/#service-professional-driver-service"
+        },
+        {
+          "@id": "http://localhost:5173/#service-city-outstation-tours"
         }
       ]
     },
@@ -233,6 +251,9 @@
         },
         {
           "@id": "http://localhost:5173/#service-professional-driver-service"
+        },
+        {
+          "@id": "http://localhost:5173/#service-city-outstation-tours"
         },
         {
           "@id": "http://localhost:5173/#video-rule-01"
@@ -369,6 +390,33 @@
       "serviceType": "Hire driver for personal and commercial travel",
       "name": "Professional driver service",
       "description": "Reliable, experienced drivers for your personal and commercial travel needs: punctual, professional, and road-ready.",
+      "provider": {
+        "@id": "http://localhost:5173/#business"
+      },
+      "areaServed": [
+        "Kaikhali",
+        "Baguiati",
+        "Arjunpur",
+        "Chinar Park",
+        "Rajarhat",
+        "Kolkata"
+      ],
+      "url": "http://localhost:5173/#booking",
+      "offers": {
+        "@type": "Offer",
+        "price": "500",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "description": "per 5 hours (5-seater)",
+        "url": "http://localhost:5173/#booking"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "http://localhost:5173/#service-city-outstation-tours",
+      "serviceType": "Hire driver for city and outstation trips",
+      "name": "City \u0026 outstation tours",
+      "description": "Comfortable city rides and outstation journeys with experienced drivers. Door-to-door service, flexible scheduling, and well-maintained vehicles for stress-free travel.",
       "provider": {
         "@id": "http://localhost:5173/#business"
       },
@@ -645,8 +693,8 @@
   ]
 }
     </script>
-    <script type="module" crossorigin src="./assets/indexDVhv5Hga.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/indexBCpAi_lv.css">
+    <script type="module" crossorigin src="./assets/indexLDE4CqUY.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/indexBA8xNJmX.css">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -727,14 +775,14 @@
       </div>
     </div>
 
-    <main id="main" tabindex="-1">
+<main id="main" tabindex="-1">
       <!-- ================= HERO ================= -->
       <section class="hero" id="home" aria-label="Introduction">
         <div class="hero__media" data-hero-media aria-hidden="true">
           <!-- LCP ladder: the same frame in AVIF → WebP → baseline JPEG, with a
                900w cut for phones. Keep public/hero-fallback.* in sync via
                `npm run optimize:poster`; the build audit fails if a variant is
-               missing or over its LCP budget. -->
+               missing or over its budget. -->
           <picture class="hero__picture">
             <source
               type="image/avif"
@@ -755,7 +803,13 @@
               decoding="async"
             />
           </picture>
-          <video muted loop playsinline preload="none" data-hero-video></video>
+          <!-- Modern codec ladder: AV1 → HEVC → H.264 fallback.
+               Browser picks first supported codec; keeps bandwidth low, quality high. -->
+          <video muted loop playsinline preload="none" data-hero-video>
+            <source type="video/av1" data-src-av1 />
+            <source type="video/hevc" data-src-hevc />
+            <source type="video/mp4; codecs=avc1.42E01E" data-src-h264 />
+          </video>
         </div>
         <div class="hero__scrim" aria-hidden="true"></div>
         <div class="hero__frame" aria-hidden="true"></div>
@@ -907,7 +961,7 @@
             </div>
           </article>
 
-          <article class="programme reveal">
+<article class="programme reveal">
             <div class="programme__grid">
               <span class="programme__index" aria-hidden="true">P·03</span>
               <div>
@@ -919,9 +973,35 @@
                   Reliable, experienced drivers for your personal and commercial travel needs: punctual, professional, and road-ready.
                 </p>
                 <ul class="programme__points" role="list">
-                  <li>Personal &amp; commercial</li>
+                  <li>Personal & commercial</li>
                   <li>Vetted drivers</li>
                   <li>Flexible engagement</li>
+                </ul>
+              </div>
+              <div class="programme__aside">
+                <a class="link link--underline" href="#contact" data-service-link>
+                  Enquire on call
+                  <svg class="link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="programme reveal">
+            <div class="programme__grid">
+              <span class="programme__index" aria-hidden="true">P·04</span>
+              <div>
+                <h3 class="programme__name">City & outstation tours</h3>
+                <p class="mono-label programme__focus">Book a tour</p>
+              </div>
+              <div>
+                <p class="programme__desc">
+                  Comfortable city rides and outstation journeys with experienced drivers. Door-to-door service, flexible scheduling, and well-maintained vehicles for stress-free travel.
+                </p>
+                <ul class="programme__points" role="list">
+                  <li>City & outstation</li>
+                  <li>Experienced drivers</li>
+                  <li>Flexible itineraries</li>
                 </ul>
               </div>
               <div class="programme__aside">
@@ -1047,12 +1127,13 @@
             <symbol id="icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6L2.5 9.5l6.6-.8L12 2.5Z"/></symbol>
           </svg>
 
-          <div class="reviews-marquee reveal" data-marquee role="region" aria-label="Learner reviews, auto-scrolling carousel" style="--reveal-delay: 240ms">
-            <p class="marquee__hint mono-label" aria-hidden="true">All reviews posted on Google</p>
-            <button class="marquee-pause" type="button" data-marquee-pause aria-pressed="false" aria-label="Pause review carousel">
-              <svg class="marquee-pause__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="icon-pause" d="M9 5v14M15 5v14" stroke-linecap="round"/><path class="icon-play" d="M8 5.5v13l10-6.5L8 5.5Z" stroke-linejoin="round"/></svg>
+          <div class="reviews-carousel reveal" data-carousel role="region" aria-label="Learner reviews carousel" style="--reveal-delay: 240ms">
+            <p class="carousel__hint mono-label" aria-hidden="true">All reviews posted on Google</p>
+            <button class="carousel-btn carousel-btn--prev" type="button" data-carousel-prev aria-label="Previous reviews" aria-disabled="true">
+              <svg class="carousel-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <ul class="marquee__track" data-marquee-track>
+            <div class="carousel__viewport">
+              <ul class="carousel__track" data-carousel-track>
               <li class="tcard">
                 <span class="review__stars" role="img" aria-label="Rated 5 out of 5">
                   <svg aria-hidden="true"><use href="#icon-star" /></svg>
@@ -1593,11 +1674,16 @@
                   </div>
                 </div>
               </li>
-            </ul>
+</ul>
+            </div>
+            <button class="carousel-btn carousel-btn--next" type="button" data-carousel-next aria-label="Next reviews" aria-disabled="false">
+              <svg class="carousel-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Review groups"></div>
           </div>
 
           <div class="reviews__foot reveal">
-            <a class="btn btn--secondary" href="https://www.google.com/maps/place/ATABUL+DRIVING+CENTER/@22.6323921,88.4315486,17z" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn--secondary" href="https://www.google.com/maps/place/ATABUL+DRIVING+CENTER/@22.632397,88.4216995,15z/data=!4m6!3m5!1s0x39f89fd036a29a5b:0xebea42f061983a33!8m2!3d22.6323921!4d88.4315486!16s%2Fg%2F11x8xkz1ny?entry=ttu&g_ep=EgoyMDI2MDkxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
               Read reviews on Google
               <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
@@ -1816,7 +1902,7 @@
                   <p class="fee-panel__note">All car services include experienced driver, fuel, tolls & parking. Driver meals & interstate permits extra where applicable.</p>
                   <p class="fee-panel__cta">
                     Have a specific travel requirement?
-                    <a href="tel:+916290345383">Call us directly</a> to discuss your trip details — we&rsquo;ll arrange a suitable car service.
+                    <a href="tel:+919748449601">Call us directly</a> to discuss your trip details — we&rsquo;ll arrange a suitable car service.
                   </p>
                 </footer>
               </article>
@@ -1828,7 +1914,7 @@
               <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke-linejoin="round"/></svg>
               Call us to book
             </a>
-            <a class="btn btn--secondary" href="#booking">Request a callback</a>
+            <a class="btn btn--secondary" href="https://wa.me/916290345383?text=Request%20for%20callback" target="_blank" rel="noopener noreferrer">Request a callback</a>
           </div>
         </div>
       </section>
@@ -2251,7 +2337,7 @@
             <div class="contact__row reveal">
               <span class="contact__row-label">Call / WhatsApp</span>
               <a href="tel:+916290345383">+91 62903 45383</a>
-              <span class="contact__address">Driver service enquiries: <a href="tel:+919748449601">+91 97484 49601</a></span>
+              <span class="contact__address">Driver & Car service enquiries: <a href="tel:+919748449601">+91 97484 49601</a></span>
             </div>
             <div class="contact__row reveal" style="--reveal-delay: 80ms">
               <span class="contact__row-label">Email</span>

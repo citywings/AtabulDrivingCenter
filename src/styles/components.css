@@ -133,12 +133,13 @@
     box-shadow var(--dp-dur-ui) var(--dp-ease-out-exact),
     border-color var(--dp-dur-ui) var(--dp-ease-out-exact);
   border-bottom: 1px solid transparent;
-  /* Permanent readability scrim — logo and nav stay legible over the film */
+  /* Stable background from first paint — no gradient-to-transparent flash.
+     The solid scrim ensures logo and nav stay legible over the hero media. */
   background: linear-gradient(
     to bottom,
-    rgba(11, 27, 43, 0.82) 0%,
-    rgba(11, 27, 43, 0.55) 62%,
-    rgba(11, 27, 43, 0) 100%
+    rgba(11, 27, 43, 0.92) 0%,
+    rgba(11, 27, 43, 0.75) 62%,
+    rgba(11, 27, 43, 0.35) 100%
   );
 }
 .header.is-scrolled {
@@ -170,19 +171,23 @@
    lands (it is mirrored in index.html's critical CSS for the same reason). */
 .logo__picture { display: contents; }
 /* The mark is the artwork itself: full colour, its own light ground, and its own
-   lettering sized at ~14% of the mark's height. Height drives and width follows - the
-   file is 380x288, and a square width+height pair *stretches* it, which is what shipped
-   for one revision. Plate treatment so a light rectangle reads as a badge on navy
-   instead of an unstyled image: the radius and gold hairline come from the token set,
-   and the scrim is the drop-shadow that has been here since the SVG mark. */
-.logo__mark {
-  height: clamp(6rem, 5vw + 4.5rem, 7rem);
-  width: auto;
-  flex: none;
-  border-radius: var(--dp-radius-md);
-  border: var(--dp-border-gold);
-  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55));
-}
+    lettering sized at ~14% of the mark's height. Fixed height prevents layout shift
+    from clamp() calculation during font load. The file is 380x288 — height drives
+    and width follows (auto). Plate treatment so a light rectangle reads as a badge
+    on navy instead of an unstyled image: the radius and gold hairline come from
+    the token set, and the scrim is the drop-shadow that has been here since the
+    SVG mark. */
+  .logo__mark {
+    height: 96px;
+    width: auto;
+    flex: none;
+    border-radius: var(--dp-radius-md);
+    border: var(--dp-border-gold);
+    filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.55));
+  }
+  @media (max-width: 22.4375em) {
+    .logo__mark { height: 80px; }
+  }
 .logo__word {
   display: flex;
   flex-direction: column;

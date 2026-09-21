@@ -28,14 +28,14 @@ const master = path.join(publicDir, "hero-fallback.jpg");
 
 // Budgets mirror BUDGETS in vite/plugins/seo.ts — keep the two in step.
 const TARGETS = [
-  { out: "hero-fallback.avif", width: 1600, codec: "avif", budgetKb: 120 },
-  { out: "hero-fallback-900.avif", width: 900, codec: "avif", budgetKb: 120 },
-  { out: "hero-fallback.webp", width: 1600, codec: "webp", budgetKb: 170 },
-  { out: "hero-fallback-900.webp", width: 900, codec: "webp", budgetKb: 170 },
+  { out: "hero-fallback.avif", width: 1600, codec: "avif", budgetKb: 80 },
+  { out: "hero-fallback-900.avif", width: 900, codec: "avif", budgetKb: 50 },
+  { out: "hero-fallback.webp", width: 1600, codec: "webp", budgetKb: 120 },
+  { out: "hero-fallback-900.webp", width: 900, codec: "webp", budgetKb: 80 },
 ];
 
-const AVIF_CRF = "34";
-const WEBP_QUALITY = "78";
+const AVIF_CRF = "42";
+const WEBP_QUALITY = "60";
 
 if (!ffmpegPath || !existsSync(ffmpegPath)) {
   console.error("ffmpeg binary not found — run npm install first");

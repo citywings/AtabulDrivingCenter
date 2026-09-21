@@ -226,6 +226,19 @@ export const programmes: Programme[] = [
     priceNumber: 500,
     priceUnit: "per 5 hours (5-seater)",
   },
+  {
+    id: "city-outstation-tours",
+    index: "P·04",
+    name: "City & outstation tours",
+    serviceType: "Hire driver for city and outstation trips",
+    audience: "Book a tour",
+    description:
+      "Comfortable city rides and outstation journeys with experienced drivers. Door-to-door service, flexible scheduling, and well-maintained vehicles for stress-free travel.",
+    points: ["City & outstation", "Experienced drivers", "Flexible itineraries"],
+    price: "500",
+    priceNumber: 500,
+    priceUnit: "per 5 hours (5-seater)",
+  },
 ];
 
 /* --------------------------------------------------------------------------

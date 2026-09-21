@@ -465,18 +465,27 @@
 }
 
 /* --------------------------------------------------------------------------
-   REVIEWS MARQUEE — slow drift right→left, pause on hover, edge fades.
-   CSS-only motion; JS mirrors the track once for the seamless -50% loop.
+   REVIEWS CAROUSEL — user-controlled, accessible carousel.
+   Replaces the auto-scrolling marquee with manual navigation.
    -------------------------------------------------------------------------- */
-.reviews-marquee {
+.reviews-carousel {
   position: relative;
   margin-top: var(--dp-space-64);
-  overflow: hidden;
-  padding-block: var(--dp-space-8);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  /* Extra horizontal padding so prev/next buttons (positioned at -24px)
+     don't get clipped by parent container edges */
+  padding-inline: var(--dp-space-24);
 }
-.marquee__hint {
+@media (max-width: 768px) {
+  .reviews-carousel {
+    padding-inline: var(--dp-space-16);
+  }
+}
+@media (max-width: 480px) {
+  .reviews-carousel {
+    padding-inline: var(--dp-space-8);
+  }
+}
+.carousel__hint {
   margin: 0 0 var(--dp-space-16);
   font-family: var(--dp-font-mono);
   font-size: var(--dp-text-micro);
@@ -485,28 +494,26 @@
   color: var(--dp-muted);
   text-align: center;
 }
-.marquee__track {
+.carousel__viewport {
+  position: relative;
+  overflow: hidden;
+}
+.carousel__track {
   display: flex;
   align-items: stretch;
-  width: max-content;
   list-style: none;
   margin: 0;
   padding: 0;
+  gap: var(--dp-space-24);
   will-change: transform;
-  animation: marquee-drift var(--marquee-duration, 120s) linear infinite;
-}
-/* Spacing rides on each card (not track gap): 2N cards + 2N trailing gaps makes
-   one copy exactly half the track, so the -50% loop wraps without a hop. */
-.marquee__track > * { margin-right: var(--dp-space-24); }
-@keyframes marquee-drift {
-  from { transform: translateX(-50%); }  /* enters from the left… */
-  to   { transform: translateX(0); }     /* …drifts right, loops seamlessly */
+  transition: transform var(--dp-dur-normal) cubic-bezier(0.22, 1, 0.36, 1);
 }
 .tcard {
   display: flex;
   flex-direction: column;
   gap: var(--dp-space-16);
   width: clamp(20rem, 28vw, 23rem);
+  flex-shrink: 0;
   padding: var(--dp-space-24);
   background: var(--dp-white);
   border: 1px solid var(--dp-border);
@@ -541,42 +548,120 @@
   padding: 2px 10px;
   border-radius: 999px;
 }
-/* Pause on focus (keyboard) always; pause on hover only on devices that really
-   have a hover state. On touch, :hover "sticks" after a tap, so an ungated
-   hover rule can leave the carousel frozen with no visible way to resume — the
-   explicit control below is the touch affordance. */
-.reviews-marquee:focus-within .marquee__track { animation-play-state: paused; }
-@media (hover: hover) and (pointer: fine) {
-  .reviews-marquee:hover .marquee__track { animation-play-state: paused; }
-}
 
-/* Carousel pause control — WCAG 2.2.2: keyboard-reachable pause/Play for
-   auto-moving content (hover alone is not sufficient) */
-.marquee-pause {
+/* Navigation buttons */
+.carousel-btn {
   display: inline-grid;
   place-items: center;
-  /* 44px, not 36px: on a phone this is the only pause control a visitor can
-     actually reach, so it has to survive a thumb. */
   width: var(--dp-tap);
   height: var(--dp-tap);
   border-radius: 999px;
   border: 1px solid var(--dp-border-strong);
   color: var(--dp-navy-900);
   background: var(--dp-white);
-  transition: border-color var(--dp-dur-micro) linear, background-color var(--dp-dur-micro) linear;
+  transition: border-color var(--dp-dur-micro) linear, background-color var(--dp-dur-micro) linear, opacity var(--dp-dur-micro) linear;
+  flex-shrink: 0;
 }
-.marquee-pause:hover { border-color: var(--dp-navy-900); }
-.marquee-pause[aria-pressed="true"] { background: var(--dp-navy-900); color: var(--dp-gold-400); }
-.marquee-pause__icon { width: 1.125rem; height: 1.125rem; }
-.marquee-pause .icon-play { display: none; }
-.marquee-pause[aria-pressed="true"] .icon-pause { display: none; }
-.marquee-pause[aria-pressed="true"] .icon-play { display: block; }
-.reviews-marquee .marquee-pause {
+.carousel-btn:hover {
+  border-color: var(--dp-navy-900);
+}
+.carousel-btn:focus-visible {
+  outline: 2px solid var(--dp-gold-400);
+  outline-offset: 2px;
+}
+.carousel-btn:disabled,
+.carousel-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.carousel-btn__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.carousel-btn--prev {
   position: absolute;
-  top: 0;
-  right: 0;
+  left: calc(var(--dp-space-24) * -1);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 2;
 }
+.carousel-btn--next {
+  position: absolute;
+  right: calc(var(--dp-space-24) * -1);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* Pagination dots */
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--dp-space-8);
+  margin-top: var(--dp-space-24);
+  padding: 0;
+  list-style: none;
+}
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid var(--dp-navy-900);
+  background: transparent;
+  padding: 0;
+  transition: background-color var(--dp-dur-micro) linear, border-color var(--dp-dur-micro) linear, transform var(--dp-dur-micro) linear;
+}
+.carousel-dot:hover {
+  border-color: var(--dp-gold-400);
+  background: var(--dp-gold-400);
+}
+.carousel-dot:focus-visible {
+  outline: 2px solid var(--dp-gold-400);
+  outline-offset: 2px;
+}
+.carousel-dot[aria-selected="true"] {
+  background: var(--dp-navy-900);
+  border-color: var(--dp-navy-900);
+  transform: scale(1.2);
+}
+
+/* Responsive button positioning */
+@media (max-width: 1024px) {
+  .carousel-btn--prev {
+    left: calc(var(--dp-space-16) * -1);
+  }
+  .carousel-btn--next {
+    right: calc(var(--dp-space-16) * -1);
+  }
+}
+@media (max-width: 768px) {
+  .carousel-btn--prev {
+    left: calc(var(--dp-space-8) * -1);
+  }
+  .carousel-btn--next {
+    right: calc(var(--dp-space-8) * -1);
+  }
+}
+@media (max-width: 480px) {
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .carousel-btn--prev {
+    left: 0;
+  }
+  .carousel-btn--next {
+    right: 0;
+  }
+}
+
+/* Reduced motion: instant transitions */
+@media (prefers-reduced-motion: reduce) {
+  .carousel__track {
+    transition: transform 0.01ms;
+  }
+}
+
 .rules-rail__head {
   display: flex;
   align-items: center;
@@ -585,12 +670,6 @@
   margin: 0 0 var(--dp-space-12);
 }
 .rules-rail__head .rules-rail__title { margin: 0; text-align: left; }
-
-/* Accessibility: honor reduced motion — static, no drift, no mask needed */
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track { animation: none; flex-wrap: wrap; width: auto; }
-  .reviews-marquee { mask-image: none; -webkit-mask-image: none; }
-}
 
 /* --------------------------------------------------------------------------
    FEES — horizontal tab navigation with content panels
@@ -614,6 +693,7 @@
 .fees__tab {
   flex: 1 1 auto;
   min-width: 160px;
+  min-height: var(--dp-tap);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1119,6 +1199,10 @@
 }
 .booking__pane { display: none; }
 .booking__pane.is-active { display: block; animation: dp-pane var(--dp-dur-ui) var(--dp-ease-out-exact); }
+
+/* Disable pane animation on initial render for instant first-step visibility */
+.booking--no-animate .booking__pane.is-active { animation: none; }
+
 @keyframes dp-pane {
   from { opacity: 0; transform: translateY(0.5rem); }
   to { opacity: 1; transform: none; }

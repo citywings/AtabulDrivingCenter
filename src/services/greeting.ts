@@ -6,7 +6,9 @@
 
 const CITY_CACHE_KEY = 'atabul:greeting:city';
 const CITY_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const GEO_API = 'https://ipapi.co/json/';
+// Geo API is optional — disabled by default to avoid third-party request.
+// Enable by setting VITE_GEO_API in .env.local
+const GEO_API = import.meta.env.VITE_GEO_API ?? '';
 
 export type TimeOfDay = 'Morning' | 'Afternoon' | 'Evening' | 'Night';
 
@@ -37,8 +39,9 @@ function isCityCacheValid(cached: { city: string; timestamp: number } | null): b
   return Date.now() - cached.timestamp < CITY_CACHE_TTL_MS;
 }
 
-/** Fetch geolocation from ipapi.co. Returns city or null on failure. */
+/** Fetch geolocation from configured API. Returns city or null on failure/disabled. */
 async function fetchCity(): Promise<string | null> {
+  if (!GEO_API) return null;
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
@@ -84,7 +87,7 @@ async function getCity(): Promise<string> {
     // Cache corrupted — continue to fresh fetch
   }
 
-  // 2. Fresh geolocation fetch
+  // 2. Fresh geolocation fetch (optional)
   const city = await fetchCity();
   const resolvedCity = city ?? 'Visitor';
 
