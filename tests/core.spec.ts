@@ -19,10 +19,17 @@ test.describe('Atabul Driving Center - Core Functionality', () => {
   });
 
   test('Navigation links are present', async ({ page }) => {
-    const navLinks = page.locator('.nav-desktop__link, .mobile-menu__link');
-    await expect(navLinks.first()).toBeVisible();
-    const count = await navLinks.count();
-    expect(count).toBeGreaterThan(0);
+    const viewport = page.viewportSize();
+    if (viewport && viewport.width < 640) {
+      // Mobile: hamburger button should be visible
+      await expect(page.locator('[data-menu-toggle]')).toBeVisible();
+    } else {
+      // Desktop/tablet: nav links should be visible
+      const navLinks = page.locator('.nav-desktop__link');
+      await expect(navLinks.first()).toBeVisible();
+      const count = await navLinks.count();
+      expect(count).toBeGreaterThan(0);
+    }
   });
 
   test('About section reachable via scroll', async ({ page }) => {

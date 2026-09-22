@@ -501,13 +501,14 @@ html:not(.js) .nav-desktop__list { flex-wrap: wrap; gap: var(--dp-space-4) var(-
   transition: border-color var(--dp-dur-ui) var(--dp-ease-out-exact), background-color var(--dp-dur-ui) var(--dp-ease-out-exact);
 }
 .option:hover { border-color: var(--dp-navy-600); }
-.option__input { position: absolute; opacity: 0; pointer-events: none; }
+.option__input { position: absolute; opacity: 0; }
 .option__check {
   width: 1rem; height: 1rem;
   margin-top: 3px;
   flex: none;
   border: 1.5px solid var(--dp-border-strong);
   border-radius: 50%;
+  pointer-events: none;
   transition: border-color var(--dp-dur-micro) linear, box-shadow var(--dp-dur-micro) linear;
 }
 .option__text { display: grid; gap: 2px; }

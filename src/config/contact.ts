@@ -20,10 +20,10 @@ export const CONTACT = {
   /** Pre-filled first message for a cold enquiry from the fixed rail. */
   enquiryMessage:
     "Hello Atabul Driving Center, I would like to know about four-wheeler driving lessons in Kaikhali.",
-  /** Second line, published only for driver-service enquiries. */
-  driverServicePhone: "+919748449601",
-  driverServiceDisplayPhone: "+91 97484 49601",
-} as const;
+  /** Driver service line — same number for now, but separate for schema/GBP. */
+  driverServicePhone: "+916290345383",
+  driverServiceDisplayPhone: "+91 62903 45383",
+  } as const;
 
 export const telHref = `tel:${CONTACT.phone}`;
 
