@@ -1,5 +1,7 @@
 # Atabul Driving Center
 
+![CI](https://github.com/citywings/AtabulDrivingCenter/actions/workflows/ci.yml/badge.svg)
+
 > Professional four-wheeler driving education in Kaikhali, Kolkata — patient instruction, real-road practice, and a method that builds confidence from the first ignition.
 
 ---
